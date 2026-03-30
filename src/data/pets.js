@@ -20,4 +20,11 @@ export const pets = [
     age: "3 años",
     image: "https://placedog.net/502",
   },
+  {
+    id: 4,
+    name: "Polo",
+    breed: "Doberman",
+    age: "3 años",
+    image: "https://placedog.net/502",
+  },
 ];
