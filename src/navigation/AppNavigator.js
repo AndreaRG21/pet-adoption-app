@@ -4,6 +4,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WelcomeView from "../views/WelcomeView";
 import SwipeView from "../views/SwipeView";
 import HomeView from "../views/HomeView";
+import LoginView from "../views/LoginView";
+import SignUpView from "../views/SignUpView";
+import ProfileView from "../views/ProfileView";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +19,9 @@ export default function AppNavigator() {
         <Stack.Screen name="Welcome" component={WelcomeView} />
         <Stack.Screen name="Swipe" component={SwipeView} />
         <Stack.Screen name="Home" component={HomeView} />
+        <Stack.Screen name="Login" component={LoginView} />
+        <Stack.Screen name="SignUp" component={SignUpView} />
+        <Stack.Screen name="Profile" component={ProfileView} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -7,18 +7,25 @@ import {
   StyleSheet,
 } from "react-native";
 
-export default function LoginView({ navigation }) {
+export default function SignUpView({ navigation }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    console.log("Login:", email, password);
-    navigation.navigate("Home"); // o como se llame tu home
+  const handleSignUp = () => {
+    console.log("User:", name, email, password);
+    navigation.navigate("Home");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>PetAdopt 🐶</Text>
+      <Text style={styles.title}>Create Account 🐾</Text>
+
+      <TextInput
+        placeholder="Name"
+        style={styles.input}
+        onChangeText={setName}
+      />
 
       <TextInput
         placeholder="Email"
@@ -33,12 +40,12 @@ export default function LoginView({ navigation }) {
         onChangeText={setPassword}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>LOG IN</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>SIGN UP</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-        <Text style={styles.link}>Don’t have an account? Sign up</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <Text style={styles.link}>Already have an account? Log in</Text>
       </TouchableOpacity>
     </View>
   );
@@ -46,7 +53,7 @@ export default function LoginView({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", padding: 20 },
-  title: { fontSize: 28, textAlign: "center", marginBottom: 30 },
+  title: { fontSize: 26, textAlign: "center", marginBottom: 30 },
   input: {
     backgroundColor: "#eee",
     padding: 12,
@@ -54,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   button: {
-    backgroundColor: "#FF914D",
+    backgroundColor: "#4CAF50",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",

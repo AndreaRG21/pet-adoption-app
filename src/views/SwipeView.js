@@ -41,6 +41,9 @@ export default function SwipeView({ navigation }) {
     transform: [{ translateX: position.x }, { translateY: position.y }],
   };
 
+  const [likedPets, setLikedPets] = useState([]);
+  const [dislikedPets, setDislikedPets] = useState([]);
+
   return (
     <View style={styles.container}>
       <TopBar title="Descubre Mascotas 🐶" />
