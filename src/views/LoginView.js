@@ -10,10 +10,22 @@ import {
 export default function LoginView({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = () => {
-    console.log("Login:", email, password);
-    navigation.navigate("Home"); // o como se llame tu home
+
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPassword = password.trim();
+
+    console.log("Email:", cleanEmail);
+    console.log("Password:", cleanPassword);
+
+    if (cleanEmail === "admin@test.com" && cleanPassword === "12345678") {
+      setError("");
+      navigation.navigate("Home");
+    } else {
+      setError("Correo o contraseña incorrectos");
+    }
   };
 
   return (
@@ -24,6 +36,7 @@ export default function LoginView({ navigation }) {
         placeholder="Email"
         style={styles.input}
         onChangeText={setEmail}
+        value={email}
       />
 
       <TextInput
@@ -31,7 +44,10 @@ export default function LoginView({ navigation }) {
         secureTextEntry
         style={styles.input}
         onChangeText={setPassword}
+        value={password}
       />
+
+      {error !== "" && <Text style={styles.error}>{error}</Text>}
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>LOG IN</Text>
@@ -61,4 +77,5 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: "#fff", fontWeight: "bold" },
   link: { marginTop: 15, textAlign: "center" },
+  error: { color: "red", textAlign: "center", marginBottom: 10 },
 });

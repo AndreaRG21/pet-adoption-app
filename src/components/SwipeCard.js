@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: "hidden",
 
-    // 🔥 sombra (Android + iOS)
+    
     elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.2,

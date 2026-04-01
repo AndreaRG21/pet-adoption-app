@@ -8,24 +8,23 @@ import {
 } from "react-native";
 
 export default function SignUpView({ navigation }) {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleSignUp = () => {
-    console.log("User:", name, email, password);
-    navigation.navigate("Home");
+  const handleRegister = () => {
+
+    // MOCK REGISTRO
+    if (email !== "" && password !== "") {
+      setMessage("Usuario registrado correctamente (mock)");
+    } else {
+      setMessage("Completa todos los campos");
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create Account 🐾</Text>
-
-      <TextInput
-        placeholder="Name"
-        style={styles.input}
-        onChangeText={setName}
-      />
+      <Text style={styles.title}>Register 🐾</Text>
 
       <TextInput
         placeholder="Email"
@@ -40,12 +39,14 @@ export default function SignUpView({ navigation }) {
         onChangeText={setPassword}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+      {message !== "" && <Text style={styles.msg}>{message}</Text>}
+
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>SIGN UP</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-        <Text style={styles.link}>Already have an account? Log in</Text>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Text style={styles.link}>Back to login</Text>
       </TouchableOpacity>
     </View>
   );
@@ -53,7 +54,7 @@ export default function SignUpView({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", padding: 20 },
-  title: { fontSize: 26, textAlign: "center", marginBottom: 30 },
+  title: { fontSize: 28, textAlign: "center", marginBottom: 30 },
   input: {
     backgroundColor: "#eee",
     padding: 12,
@@ -68,4 +69,5 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: "#fff", fontWeight: "bold" },
   link: { marginTop: 15, textAlign: "center" },
+  msg: { textAlign: "center", marginBottom: 10 },
 });

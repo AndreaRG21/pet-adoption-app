@@ -7,7 +7,7 @@ import HomeView from "../views/HomeView";
 import LoginView from "../views/LoginView";
 import SignUpView from "../views/SignUpView";
 import ProfileView from "../views/ProfileView";
-
+import PetDetailView from "../views/PetDetailView";
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -22,6 +22,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Login" component={LoginView} />
         <Stack.Screen name="SignUp" component={SignUpView} />
         <Stack.Screen name="Profile" component={ProfileView} />
+        <Stack.Screen name="PetDetail" component={PetDetailView} />
       </Stack.Navigator>
     </NavigationContainer>
   );
