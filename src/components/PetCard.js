@@ -7,10 +7,10 @@ export default function PetCard({ pet, navigation }) {
       onPress={() => navigation.navigate("PetDetail", { pet })}
       activeOpacity={0.8}
     >
-      {/* 🖼 Imagen */}
+      
       <Image source={{ uri: pet.image }} style={styles.image} />
 
-      {/* 📄 Info */}
+     
       <View style={styles.infoContainer}>
         <Text style={styles.name}>{pet.name}</Text>
         <Text style={styles.breed}>{pet.breed}</Text>
@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     overflow: "hidden",
 
-    // 🔥 sombra pro
     shadowColor: "#000",
     shadowOpacity: 0.15,
     shadowRadius: 8,
