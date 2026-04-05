@@ -1,15 +1,34 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
-export default function PetDetailView({ route }) {
+export default function PetDetailView({ route, navigation }) {
   const { pet } = route.params;
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: pet.image }} style={styles.image} />
+      {/* 🔵 Título */}
+      <Text style={styles.title}>Detalle 🐾</Text>
 
-      <Text style={styles.name}>{pet.name}</Text>
-      <Text style={styles.info}>Raza: {pet.breed}</Text>
-      <Text style={styles.info}>Edad: {pet.age}</Text>
+      {/* ⚪ Card */}
+      <View style={styles.card}>
+        <Image source={{ uri: pet.image }} style={styles.image} />
+
+        <Text style={styles.name}>{pet.name}</Text>
+
+        <View style={styles.infoBox}>
+          <Text style={styles.label}>Raza</Text>
+          <Text style={styles.value}>{pet.breed}</Text>
+        </View>
+
+        <View style={styles.infoBox}>
+          <Text style={styles.label}>Edad</Text>
+          <Text style={styles.value}>{pet.age}</Text>
+        </View>
+
+        {/* Botón */}
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Adoptar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -17,26 +36,75 @@ export default function PetDetailView({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#2F6BFF",
     alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+
+  title: {
+    position: "absolute",
+    top: 60,
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+
+  card: {
+    width: "90%",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+    alignItems: "center",
+
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5,
   },
 
   image: {
-    width: "30%",
-    height: 300,
+    width: "100%",
+    height: 220,
     borderRadius: 15,
-    marginBottom: 20,
+    marginBottom: 15,
   },
 
   name: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
     marginBottom: 10,
   },
 
-  info: {
+  infoBox: {
+    width: "100%",
+    backgroundColor: "#f5f5f5",
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 8,
+  },
+
+  label: {
+    fontSize: 12,
+    color: "#888",
+  },
+
+  value: {
     fontSize: 16,
-    marginBottom: 5,
+    fontWeight: "bold",
+  },
+
+  button: {
+    backgroundColor: "#FFA726",
+    padding: 14,
+    borderRadius: 10,
+    marginTop: 15,
+    width: "100%",
+    alignItems: "center",
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });

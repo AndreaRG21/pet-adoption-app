@@ -10,7 +10,7 @@ export default function WelcomeView({ navigation }) {
         style={styles.image}
       />
 
-      <Button title="Continuar" onPress={() => navigation.navigate("Swipe")} />
+      <Button title="Continuar" onPress={() => navigation.navigate("Main", { screen: "Swipe" })} />
     </View>
   );
 }

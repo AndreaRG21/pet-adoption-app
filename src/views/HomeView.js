@@ -16,14 +16,14 @@ export default function HomeView({ navigation }) {
           style={styles.profileButton}
           onPress={() => navigation.navigate("Profile")}
         >
-          <Text style={styles.buttonText}>Perfil</Text>
+          <Text style={styles.buttonText}>Profile</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.logoutButton}
           onPress={() => navigation.navigate("Login")}
         >
-          <Text style={styles.buttonText}>Cerrar sesión</Text>
+          <Text style={styles.buttonText}>Log out</Text>
         </TouchableOpacity>
 
       </View>
@@ -37,6 +37,9 @@ export default function HomeView({ navigation }) {
     <PetCard pet={item} navigation={navigation} />
   )}
 />
+<TouchableOpacity onPress={() => navigation.navigate("AddPet")}>
+  <Text>Register new pets</Text>
+</TouchableOpacity>
 
       <FloatingButton
         title="Catálogo"

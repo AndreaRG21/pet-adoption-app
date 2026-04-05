@@ -5,12 +5,17 @@ export default function PetCard({ pet, navigation }) {
     <TouchableOpacity
       style={styles.card}
       onPress={() => navigation.navigate("PetDetail", { pet })}
+      activeOpacity={0.8}
     >
+      {/* 🖼 Imagen */}
       <Image source={{ uri: pet.image }} style={styles.image} />
 
-      <Text style={styles.name}>{pet.name}</Text>
-      <Text style={styles.info}>{pet.breed}</Text>
-      <Text style={styles.info}>{pet.age}</Text>
+      {/* 📄 Info */}
+      <View style={styles.infoContainer}>
+        <Text style={styles.name}>{pet.name}</Text>
+        <Text style={styles.breed}>{pet.breed}</Text>
+        <Text style={styles.age}>{pet.age}</Text>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -18,30 +23,44 @@ export default function PetCard({ pet, navigation }) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    margin: 3,
+    margin: 8,
     backgroundColor: "#fff",
-    padding: 5,
-    borderRadius: 10,
-    alignItems: "center",
+    borderRadius: 15,
+    overflow: "hidden",
+
+    // 🔥 sombra pro
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
   },
 
   image: {
-    width: "90%",
-    height: 170,
-    borderRadius: 8,
-    resizeMode: "cover",
+    width: "100%",
+    height: 140,
+  },
+
+  infoContainer: {
+    padding: 10,
+    alignItems: "center",
   },
 
   name: {
-    marginTop: 5,
+    fontSize: 16,
     fontWeight: "bold",
-    fontSize: 10,
-    textAlign: "center",
+    color: "#333",
   },
 
-  info: {
-    fontSize: 9,
-    color: "#555",
-    textAlign: "center",
+  breed: {
+    fontSize: 13,
+    color: "#777",
+    marginTop: 2,
+  },
+
+  age: {
+    fontSize: 12,
+    color: "#2F6BFF", // 🔵 azul de tu app
+    marginTop: 2,
+    fontWeight: "600",
   },
 });

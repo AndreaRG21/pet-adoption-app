@@ -19,6 +19,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     elevation: 5,
   },
+  container: {
+  position: "absolute",
+  bottom: 20,
+  right: 20,
+},
   text: {
     color: "#fff",
     fontWeight: "bold",

@@ -5,10 +5,12 @@ export default function SwipeCard({ pet }) {
     <View style={styles.card}>
       <Image source={{ uri: pet.image }} style={styles.image} />
 
-      <View style={styles.info}>
+     
+      <View style={styles.overlay}>
         <Text style={styles.name}>{pet.name}</Text>
-        <Text>{pet.breed}</Text>
-        <Text>{pet.age}</Text>
+        <Text style={styles.details}>
+          {pet.breed} • {pet.age}
+        </Text>
       </View>
     </View>
   );
@@ -16,27 +18,32 @@ export default function SwipeCard({ pet }) {
 
 const styles = StyleSheet.create({
   card: {
-    width: 300,
-    height: 400,
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    overflow: "hidden",
+  width: 270,
+  height: 360,
+  borderRadius: 20,
+  overflow: "hidden",
+},
 
-    
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-  },
   image: {
     width: "100%",
-    height: "70%",
+    height: "100%",
   },
-  info: {
+
+  overlay: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
     padding: 15,
+    backgroundColor: "rgba(0,0,0,0.4)",
   },
+
   name: {
+    color: "#fff",
     fontSize: 22,
     fontWeight: "bold",
+  },
+
+  details: {
+    color: "#ddd",
   },
 });
