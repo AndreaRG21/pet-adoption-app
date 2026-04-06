@@ -15,20 +15,12 @@ export default function HomeView({ navigation }) {
     <View style={styles.container}>
       <TopBar title="🐾 Catálogo" />
 
-     
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.addBtn}
           onPress={() => navigation.navigate("AddPet")}
         >
           <Text style={styles.btnText}>+ Add Pet</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.logoutBtn}
-          onPress={() => navigation.navigate("Login")}
-        >
-          <Text style={styles.btnText}>🚪 Log out</Text>
         </TouchableOpacity>
       </View>
 
