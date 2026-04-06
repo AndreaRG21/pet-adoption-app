@@ -15,10 +15,8 @@ export default function HomeView({ navigation }) {
     <View style={styles.container}>
       <TopBar title="🐾 Catálogo" />
 
-
+     
       <View style={styles.header}>
-        
-
         <TouchableOpacity
           style={styles.addBtn}
           onPress={() => navigation.navigate("AddPet")}
@@ -34,10 +32,10 @@ export default function HomeView({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* 🔥 TITLE */}
+      {/* TITULO */}
       <Text style={styles.sectionTitle}>Adopta tu compañero 💙</Text>
 
-      {/* 🔥 GRID */}
+      {/* LISTA */}
       <FlatList
         data={pets}
         numColumns={2}
@@ -63,35 +61,41 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 15,
     marginTop: 10,
-    justifyContent: "space-between",
+    gap: 10,
   },
 
   addBtn: {
     flex: 1,
     backgroundColor: "#22c5bd",
-    padding: 12,
-    borderRadius: 15,
-    marginRight: 6,
+    paddingVertical: 12,
+    borderRadius: 16,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
 
   logoutBtn: {
     flex: 1,
     backgroundColor: "#1F2937",
-    padding: 12,
-    borderRadius: 15,
-    marginLeft: 6,
+    paddingVertical: 12,
+    borderRadius: 16,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
 
   btnText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 12,
+    fontSize: 13,
   },
 
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#1F2937",
     marginTop: 15,
@@ -101,10 +105,11 @@ const styles = StyleSheet.create({
   list: {
     paddingHorizontal: 10,
     paddingTop: 10,
-    paddingBottom: 80,
+    paddingBottom: 90,
   },
 
   row: {
     justifyContent: "space-between",
+    marginBottom: 10,
   },
 });

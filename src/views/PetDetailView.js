@@ -5,10 +5,10 @@ export default function PetDetailView({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* 🔵 Título */}
+    
       <Text style={styles.title}>Detalle 🐾</Text>
 
-      {/* ⚪ Card */}
+  
       <View style={styles.card}>
         <Image source={{ uri: pet.image }} style={styles.image} />
 
@@ -24,7 +24,6 @@ export default function PetDetailView({ route, navigation }) {
           <Text style={styles.value}>{pet.age}</Text>
         </View>
 
-        {/* Botón */}
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Adoptar</Text>
         </TouchableOpacity>
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    width: "90%",
+    width: "80%",
     backgroundColor: "#fff",
     borderRadius: 20,
     padding: 20,
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: "100%",
+    width: "90%",
     height: 220,
     borderRadius: 15,
     marginBottom: 15,
