@@ -9,21 +9,15 @@ import {
 import { pets } from "../data/pets";
 import PetCard from "../components/PetCard";
 import TopBar from "../components/TopBar";
-import FloatingButton from "../components/FloatingButton";
 
 export default function HomeView({ navigation }) {
   return (
     <View style={styles.container}>
       <TopBar title="🐾 Catálogo" />
 
-      {/* HEADER BUTTONS */}
+
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.profileBtn}
-          onPress={() => navigation.navigate("Profile")}
-        >
-          <Text style={styles.btnText}>👤 Profile</Text>
-        </TouchableOpacity>
+        
 
         <TouchableOpacity
           style={styles.addBtn}
@@ -40,10 +34,10 @@ export default function HomeView({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* TITLE */}
+      {/* 🔥 TITLE */}
       <Text style={styles.sectionTitle}>Adopta tu compañero 💙</Text>
 
-      {/* GRID */}
+      {/* 🔥 GRID */}
       <FlatList
         data={pets}
         numColumns={2}
@@ -54,12 +48,6 @@ export default function HomeView({ navigation }) {
         renderItem={({ item }) => (
           <PetCard pet={item} navigation={navigation} />
         )}
-      />
-
-      {/* FLOATING BUTTON */}
-      <FloatingButton
-        title="Home"
-        onPress={() => navigation.navigate("Home")}
       />
     </View>
   );
@@ -78,30 +66,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  profileBtn: {
-    flex: 1,
-    backgroundColor: "#4F8EF7",
-    padding: 12,
-    borderRadius: 15,
-    marginRight: 6,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-
   addBtn: {
     flex: 1,
     backgroundColor: "#22c5bd",
     padding: 12,
     borderRadius: 15,
-    marginHorizontal: 6,
+    marginRight: 6,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
   },
 
   logoutBtn: {

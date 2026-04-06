@@ -18,8 +18,8 @@ export default function SwipeCard({ pet }) {
 
 const styles = StyleSheet.create({
   card: {
-  width: 270,
-  height: 360,
+  width: 230,
+  height: 280,
   borderRadius: 20,
   overflow: "hidden",
 },

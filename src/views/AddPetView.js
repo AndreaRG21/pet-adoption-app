@@ -1,83 +1,102 @@
+import React from "react";
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
+  FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function AddPetView() {
+
+  const formFields = [
+    { id: "name", label: "Pet Name", type: "input" },
+    { id: "photo", label: "Photo", type: "image" },
+    { id: "age", label: "Age", type: "input" },
+    { id: "species", label: "Species", type: "select" },
+    { id: "gender", label: "Gender", type: "select" },
+    { id: "description", label: "Description", type: "textarea" },
+    { id: "extra", label: "Extra", type: "input" },
+  ];
+
+  const renderItem = ({ item }) => {
+    switch (item.type) {
+      case "input":
+        return (
+          <View>
+            <Text style={styles.label}>{item.label}</Text>
+            <TextInput style={styles.input} placeholder="Value" />
+          </View>
+        );
+
+      case "textarea":
+        return (
+          <View>
+            <Text style={styles.label}>{item.label}</Text>
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              multiline
+            />
+          </View>
+        );
+
+      case "image":
+        return (
+          <View>
+            <Text style={styles.labelCenter}>{item.label}</Text>
+            <TouchableOpacity style={styles.imageBox}>
+              <Ionicons name="cloud-upload-outline" size={30} color="#333" />
+            </TouchableOpacity>
+          </View>
+        );
+
+      case "select":
+        return (
+          <TouchableOpacity style={styles.select}>
+            <View style={styles.selectLeft}>
+              <Ionicons name="paw-outline" size={18} color="#C98A1A" />
+              <Text style={styles.selectText}>{item.label}</Text>
+            </View>
+            <Ionicons name="chevron-down" size={18} color="#555" />
+          </TouchableOpacity>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <View style={styles.container}>
-      {/* 🔵 Header */}
+      {/* 🔵 HEADER */}
       <Text style={styles.title}>Subir Mascota</Text>
 
-      <ScrollView
-        contentContainerStyle={styles.scroll}
+      {/* 🔥 FORM CON FLATLIST */}
+      <FlatList
+        data={formFields}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
         showsVerticalScrollIndicator={false}
-      >
-        {/* ⚪ Card */}
-        <View style={styles.card}>
-          {/* Nombre */}
-          <Text style={styles.label}>Pet Name</Text>
-          <TextInput style={styles.input} placeholder="Value" />
-
-          {/* Foto */}
-          <Text style={styles.labelCenter}>Photo</Text>
-          <TouchableOpacity style={styles.imageBox}>
-            <Ionicons name="cloud-upload-outline" size={30} color="#333" />
-          </TouchableOpacity>
-
-          {/* Edad */}
-          <Text style={styles.label}>Age</Text>
-          <TextInput style={styles.input} placeholder="Value" />
-
-          {/* Especie */}
-          <TouchableOpacity style={styles.select}>
-            <View style={styles.selectLeft}>
-              <Ionicons name="paw-outline" size={18} color="#C98A1A" />
-              <Text style={styles.selectText}>Species</Text>
-            </View>
-            <Ionicons name="chevron-down" size={18} color="#555" />
-          </TouchableOpacity>
-
-          {/* Género */}
-          <TouchableOpacity style={styles.select}>
-            <View style={styles.selectLeft}>
-              <Ionicons name="paw-outline" size={18} color="#C98A1A" />
-              <Text style={styles.selectText}>Gender</Text>
-            </View>
-            <Ionicons name="chevron-down" size={18} color="#555" />
-          </TouchableOpacity>
-
-          {/* Descripción */}
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            multiline
-          />
-
-          {/* Extra */}
-          <Text style={styles.label}>Extra</Text>
-          <TextInput style={styles.input} placeholder="Value" />
-
-          {/* Botón */}
+        contentContainerStyle={styles.card}
+        ListFooterComponent={
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>ADD PET</Text>
           </TouchableOpacity>
-        </View>
-      </ScrollView>
+        }
+      />
     </View>
   );
 }
+
+// 🎨 ESTILOS
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#2F6BFF",
-    alignItems: "center",
     paddingTop: 40,
+    alignItems: "center",
   },
 
   title: {
@@ -94,6 +113,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderWidth: 2,
     borderColor: "#2F6BFF",
+    alignSelf: "center",
   },
 
   label: {
@@ -132,6 +152,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     elevation: 3,
+    marginTop: 5,
   },
 
   select: {
@@ -160,7 +181,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#C98A1A",
     padding: 14,
     borderRadius: 10,
-    marginTop: 15,
+    marginTop: 20,
     alignItems: "center",
   },
 

@@ -1,14 +1,19 @@
-import {View,StyleSheet, Animated,Text,TouchableOpacity,} from "react-native";
+import {
+  View,
+  StyleSheet,
+  Animated,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { useRef, useState } from "react";
 import { pets } from "../data/pets";
 import SwipeCard from "../components/SwipeCard";
 import ActionButtons from "../components/ActionButtons";
-import FloatingButton from "../components/FloatingButton";
+
 export default function SwipeView({ navigation }) {
   const [index, setIndex] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  
   const [likedPets, setLikedPets] = useState([]);
   const [dislikedPets, setDislikedPets] = useState([]);
 
@@ -23,7 +28,6 @@ export default function SwipeView({ navigation }) {
     }
   };
 
- 
   const handleLike = () => {
     setLikedPets([...likedPets, pets[index]]);
 
@@ -34,7 +38,6 @@ export default function SwipeView({ navigation }) {
     }).start(nextPet);
   };
 
-  
   const handleDislike = () => {
     setDislikedPets([...dislikedPets, pets[index]]);
 
@@ -51,19 +54,16 @@ export default function SwipeView({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* 🔵 TÍTULO */}
       <Text style={styles.title}>PetAdopt 🐾</Text>
 
       {!finished ? (
         <>
-          {/* 🐶 CARD */}
           {pets[index] && (
             <Animated.View style={[styles.cardContainer, animatedStyle]}>
               <SwipeCard pet={pets[index]} />
             </Animated.View>
           )}
 
-          {/* ❤️ BOTONES */}
           <View style={styles.buttons}>
             <ActionButtons
               onLike={handleLike}
@@ -71,46 +71,33 @@ export default function SwipeView({ navigation }) {
             />
           </View>
 
-          {/* 📜 BOTÓN HISTORIAL */}
-          <View style={styles.historyButtonContainer}>
-            <TouchableOpacity
-              style={styles.historyButton}
-              onPress={() =>
-                navigation.navigate("Historial", {
-                  likedPets,
-                  dislikedPets,
-                })
-              }
-            >
-              <Text style={styles.historyText}>📜 Ver historial</Text>
-            </TouchableOpacity>
-          </View>
+        
+            
+              
         </>
       ) : (
         <View style={styles.endContainer}>
-          <Text style={styles.endText}>No hay más mascotas 🐶</Text>
+          <Text style={styles.endText}>
+            No hay más mascotas 🐶
+          </Text>
 
-          {/* BOTÓN FINAL */}
           <TouchableOpacity
-            style={styles.historyButton}
+            style={styles.btn}
             onPress={() =>
-              navigation.navigate("Historial", {
-                likedPets,
-                dislikedPets,
+              navigation.navigate("Main", {
+                screen: "Solicitudes",
+                params: { likedPets },
               })
             }
           >
-            <Text style={styles.historyText}>Ver historial</Text>
+            <Text style={styles.btnText}>Ver Solicitudes</Text>
           </TouchableOpacity>
         </View>
       )}
     </View>
   );
 }
-<FloatingButton
-  title="Catálogo"
-  onPress={() => navigation.navigate("Home")}
-/>
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -132,22 +119,22 @@ const styles = StyleSheet.create({
   },
 
   buttons: {
-  marginTop: 20,
-},
-
-
-  historyButtonContainer: {
-  marginTop: 10,
-},
-  historyButton: {
-    backgroundColor: "#fff",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    elevation: 5,
+    marginTop: 20,
   },
 
-  historyText: {
+  navButtons: {
+    flexDirection: "row",
+    marginTop: 20,
+  },
+
+  btn: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 15,
+    marginHorizontal: 5,
+  },
+
+  btnText: {
     color: "#2F6BFF",
     fontWeight: "bold",
   },
