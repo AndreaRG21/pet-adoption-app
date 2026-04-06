@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,16 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 export default function AddPetView() {
+  const [openSelect, setOpenSelect] = useState(null);
+
+  const [values, setValues] = useState({
+    name: "",
+    age: "",
+    species: "",
+    gender: "",
+    description: "",
+    extra: "",
+  });
 
   const formFields = [
     { id: "name", label: "Pet Name", type: "input" },
@@ -21,13 +31,31 @@ export default function AddPetView() {
     { id: "extra", label: "Extra", type: "input" },
   ];
 
+  const options = {
+    species: ["Dog", "Cat", "Bird", "Rabbit", "Other"],
+    gender: ["Male", "Female"],
+  };
+
+  const handleChange = (key, value) => {
+    setValues({ ...values, [key]: value });
+  };
+
+  const handleSubmit = () => {
+    console.log("PET DATA:", values);
+  };
+
   const renderItem = ({ item }) => {
     switch (item.type) {
       case "input":
         return (
           <View>
             <Text style={styles.label}>{item.label}</Text>
-            <TextInput style={styles.input} placeholder="Value" />
+            <TextInput
+              style={styles.input}
+              placeholder="Value"
+              value={values[item.id]}
+              onChangeText={(text) => handleChange(item.id, text)}
+            />
           </View>
         );
 
@@ -38,6 +66,8 @@ export default function AddPetView() {
             <TextInput
               style={[styles.input, styles.textArea]}
               multiline
+              value={values[item.id]}
+              onChangeText={(text) => handleChange(item.id, text)}
             />
           </View>
         );
@@ -54,13 +84,36 @@ export default function AddPetView() {
 
       case "select":
         return (
-          <TouchableOpacity style={styles.select}>
-            <View style={styles.selectLeft}>
-              <Ionicons name="paw-outline" size={18} color="#C98A1A" />
-              <Text style={styles.selectText}>{item.label}</Text>
-            </View>
-            <Ionicons name="chevron-down" size={18} color="#555" />
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              style={styles.select}
+              onPress={() =>
+                setOpenSelect(openSelect === item.id ? null : item.id)
+              }
+            >
+              <View style={styles.selectLeft}>
+                <Ionicons name="paw-outline" size={18} color="#C98A1A" />
+                <Text style={styles.selectText}>
+                  {values[item.id] || item.label}
+                </Text>
+              </View>
+              <Ionicons name="chevron-down" size={18} color="#555" />
+            </TouchableOpacity>
+
+            {openSelect === item.id &&
+              options[item.id].map((opt) => (
+                <TouchableOpacity
+                  key={opt}
+                  style={styles.option}
+                  onPress={() => {
+                    handleChange(item.id, opt);
+                    setOpenSelect(null);
+                  }}
+                >
+                  <Text>{opt}</Text>
+                </TouchableOpacity>
+              ))}
+          </View>
         );
 
       default:
@@ -70,10 +123,8 @@ export default function AddPetView() {
 
   return (
     <View style={styles.container}>
-      {/* 🔵 HEADER */}
       <Text style={styles.title}>Subir Mascota</Text>
 
-      {/* 🔥 FORM CON FLATLIST */}
       <FlatList
         data={formFields}
         keyExtractor={(item) => item.id}
@@ -81,7 +132,7 @@ export default function AddPetView() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.card}
         ListFooterComponent={
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>ADD PET</Text>
           </TouchableOpacity>
         }
@@ -90,7 +141,6 @@ export default function AddPetView() {
   );
 }
 
-// 🎨 ESTILOS
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -175,6 +225,13 @@ const styles = StyleSheet.create({
 
   selectText: {
     color: "#333",
+  },
+
+  option: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
   },
 
   button: {
