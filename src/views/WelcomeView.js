@@ -3,8 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 export default function WelcomeView({ navigation }) {
   return (
     <View style={styles.container}>
-      
-      {/* 🔝 MASCOTAS ARRIBA */}
+      {/*  MASCOTAS ARRIBA */}
       <View style={styles.topContainer}>
         <Image
           source={{ uri: "https://placedog.net/410" }}
@@ -16,7 +15,7 @@ export default function WelcomeView({ navigation }) {
         />
       </View>
 
-      {/* 🔵 CÍRCULO CENTRAL */}
+      {/*  CÍRCULO CENTRAL */}
       <View style={styles.circle}>
         <Text style={styles.wip}>WIP</Text>
       </View>
@@ -27,7 +26,7 @@ export default function WelcomeView({ navigation }) {
       {/* 🐾 TÍTULO */}
       <Text style={styles.title}>PetAdopt</Text>
 
-      {/* 🔽 MASCOTAS ABAJO */}
+      {/*  MASCOTAS ABAJO */}
       <View style={styles.bottomContainer}>
         <Image
           source={{ uri: "https://placedog.net/412" }}
@@ -39,12 +38,9 @@ export default function WelcomeView({ navigation }) {
         />
       </View>
 
-      {/* 🔘 BOTÓN */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
-          navigation.navigate("Main", { screen: "Swipe" })
-        }
+        onPress={() => navigation.navigate("Main", { screen: "Swipe" })}
       >
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
@@ -52,7 +48,6 @@ export default function WelcomeView({ navigation }) {
   );
 }
 
-// 🎨 ESTILOS COMPLETOS
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -84,7 +79,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
 
-  // 🔵 CÍRCULO
+  //  CÍRCULO
   circle: {
     width: 130,
     height: 130,
@@ -101,7 +96,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  // 🐾 FRANJA
+  //  FRANJA
   band: {
     position: "absolute",
     width: "100%",
@@ -110,7 +105,7 @@ const styles = StyleSheet.create({
     top: "45%",
   },
 
-  // 🐾 TEXTO
+  //  TEXTO
   title: {
     position: "absolute",
     bottom: 180,
@@ -119,7 +114,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 
-  // 🔽 ABAJO
+  //  ABAJO
   bottomContainer: {
     position: "absolute",
     bottom: 100,
@@ -133,7 +128,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
 
-  // 🔘 BOTÓN
+  //  BOTÓN
   button: {
     position: "absolute",
     bottom: 40,
