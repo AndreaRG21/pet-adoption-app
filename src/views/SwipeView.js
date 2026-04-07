@@ -5,12 +5,14 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { useRef, useState } from "react";
-import { pets } from "../data/pets";
+import { useRef, useState, useEffect } from "react";
+
 import SwipeCard from "../components/SwipeCard";
 import ActionButtons from "../components/ActionButtons";
+import { petAPI } from "../models/api";
 
 export default function SwipeView({ navigation }) {
+  const [pets, setPets] = useState([]);
   const [index, setIndex] = useState(0);
   const [finished, setFinished] = useState(false);
 
@@ -18,6 +20,29 @@ export default function SwipeView({ navigation }) {
   const [dislikedPets, setDislikedPets] = useState([]);
 
   const position = useRef(new Animated.ValueXY()).current;
+
+  // 🔥 CARGAR MASCOTAS DESDE API
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const res = await petAPI.getAllPets();
+
+        console.log("SWIPE API:", res.data);
+
+        const data =
+          res.data?.pets ||
+          res.data?.data ||
+          res.data ||
+          [];
+
+        setPets(data);
+      } catch (error) {
+        console.log("Error cargando mascotas:", error);
+      }
+    };
+
+    fetchPets();
+  }, []);
 
   const nextPet = () => {
     if (index < pets.length - 1) {
@@ -29,6 +54,8 @@ export default function SwipeView({ navigation }) {
   };
 
   const handleLike = () => {
+    if (!pets[index]) return;
+
     setLikedPets((prev) => [...prev, pets[index]]);
 
     Animated.timing(position, {
@@ -39,6 +66,8 @@ export default function SwipeView({ navigation }) {
   };
 
   const handleDislike = () => {
+    if (!pets[index]) return;
+
     setDislikedPets((prev) => [...prev, pets[index]]);
 
     Animated.timing(position, {
@@ -51,6 +80,15 @@ export default function SwipeView({ navigation }) {
   const animatedStyle = {
     transform: [{ translateX: position.x }],
   };
+
+  // 🔥 LOADING
+  if (!pets.length) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ color: "#fff" }}>Cargando mascotas...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -65,26 +103,33 @@ export default function SwipeView({ navigation }) {
           )}
 
           <View style={styles.buttons}>
-            <ActionButtons onLike={handleLike} onDislike={handleDislike} />
+            <ActionButtons
+              onLike={handleLike}
+              onDislike={handleDislike}
+            />
           </View>
         </>
       ) : (
         <View style={styles.endContainer}>
-          <Text style={styles.endText}>No hay más mascotas 🐶</Text>
+          <Text style={styles.endText}>
+            No hay más mascotas 🐶
+          </Text>
 
           <TouchableOpacity
             style={styles.btn}
             onPress={() =>
               navigation.navigate("Main", {
-                screen: "Solicitudes", // 👈 asegúrate que así se llama tu tab
+                screen: "Solicitudes",
                 params: {
                   likedPets,
-                  dislikedPets, // 🔥 YA SE MANDA
+                  dislikedPets,
                 },
               })
             }
           >
-            <Text style={styles.btnText}>Ver Solicitudes</Text>
+            <Text style={styles.btnText}>
+              Ver Solicitudes
+            </Text>
           </TouchableOpacity>
         </View>
       )}
@@ -118,7 +163,7 @@ const styles = StyleSheet.create({
 
   btn: {
     backgroundColor: "#fff",
-    padding: 10,
+    padding: 12,
     borderRadius: 15,
     marginHorizontal: 5,
   },

@@ -30,8 +30,14 @@ export const userAPI = {
   login: (data) => api.post("/api/user/login", data),
   register: (data) => api.post("/api/user/register", data),
 };
+export const petAPI = {
+  getAllPets: () => api.get("/api/pets"),
+  getPetById: (id) => api.get(`/api/pets/getPet/${id}`),
+};
 export const ENDPOINTS = {
         register: "/api/user/register",
         login: "/api/user/login",
+        getPet: (id) => `/api/pets/getPet/${id}`
+
 };
 export default api;
