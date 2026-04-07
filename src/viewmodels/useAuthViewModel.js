@@ -23,7 +23,7 @@ export function useAuthViewModel() {
 
       console.log("Login exitoso:", user);
 
-      navigation.replace("Home");
+      navigation.replace("Main");
 
     } catch (err) {
       console.log("Login error:", err);

@@ -74,7 +74,7 @@ export default function AppNavigator() {
         <Stack.Screen name="AddPet" component={AddPetView} />
         <Stack.Screen name="PetDetail" component={PetDetailView} />
 
-        {/* 🔥 TABS */}
+        
         <Stack.Screen
           name="Main"
           component={MainTabs}
