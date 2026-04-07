@@ -14,7 +14,6 @@ import ProfileView from "../views/ProfileView";
 import AddPetView from "../views/AddPetView";
 import PetDetailView from "../views/PetDetailView";
 
-// 🔥 NUEVO
 import SolicitudesView from "../views/SolicitudesView";
 
 const Stack = createNativeStackNavigator();
@@ -42,7 +41,7 @@ function MainTabs() {
           if (route.name === "Historial") iconName = focused ? "time" : "time-outline";
           if (route.name === "Profile") iconName = focused ? "person" : "person-outline";
 
-          // 🔥 SOLICITUDES
+          
           if (route.name === "Solicitudes")
             iconName = focused ? "mail" : "mail-outline";
 
@@ -54,7 +53,7 @@ function MainTabs() {
       <Tab.Screen name="Home" component={HomeView} />
       <Tab.Screen name="Historial" component={HistorialView} />
 
-      {/* 🔥 NUEVO BOTÓN */}
+      
       <Tab.Screen name="Solicitudes" component={SolicitudesView} />
 
       <Tab.Screen name="Profile" component={ProfileView} />

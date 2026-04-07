@@ -4,12 +4,21 @@ export default function PetCard({ pet, navigation }) {
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate("PetDetail", { pet })}
+      onPress={() =>
+  navigation.navigate("PetDetail", { id: pet._id })
+}
       activeOpacity={0.8}
     >
       
-      <Image source={{ uri: pet.image }} style={styles.image} />
-
+      <Image
+  source={{
+    uri:
+      pet.image ||
+      pet.photo ||
+      "https://placedog.net/500",
+  }}
+  style={styles.image}
+/>
      
       <View style={styles.infoContainer}>
         <Text style={styles.name}>{pet.name}</Text>
@@ -58,7 +67,7 @@ const styles = StyleSheet.create({
 
   age: {
     fontSize: 12,
-    color: "#2F6BFF", // 🔵 azul de tu app
+    color: "#2F6BFF",
     marginTop: 2,
     fontWeight: "600",
   },

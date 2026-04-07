@@ -1,7 +1,6 @@
 import {
   View,
   FlatList,
-  TouchableOpacity,
   Text,
   StyleSheet,
 } from "react-native";
@@ -16,33 +15,28 @@ export default function HomeView({ navigation }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  const fetchPets = async () => {
-    try {
-      const res = await petAPI.getAllPets();
+    const fetchPets = async () => {
+      try {
+        const res = await petAPI.getAllPets();
 
-      console.log("API RESPONSE:", res.data); 
+        console.log("API:", res.data);
 
-      let data = [];
+        const data =
+          res.data?.pets ||
+          res.data?.data ||
+          res.data ||
+          [];
 
-      if (Array.isArray(res.data)) {
-        data = res.data;
-      } else if (Array.isArray(res.data?.pets)) {
-        data = res.data.pets;
-      } else if (Array.isArray(res.data?.data)) {
-        data = res.data.data;
+        setPets(data);
+      } catch (error) {
+        console.log("Error:", error);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setPets(data);
-
-    } catch (error) {
-      console.log("Error cargando mascotas:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchPets();
-}, []);
+    fetchPets();
+  }, []);
 
   if (loading) {
     return (
@@ -56,12 +50,16 @@ export default function HomeView({ navigation }) {
     <View style={styles.container}>
       <TopBar title="🐾 Catálogo" />
 
-      <Text style={styles.sectionTitle}>Adopta tu compañero 💙</Text>
+      <Text style={styles.sectionTitle}>
+        Adopta tu compañero 💙
+      </Text>
 
       <FlatList
         data={pets}
         numColumns={2}
-        keyExtractor={(item, index) => item._id || index.toString()}
+        keyExtractor={(item, index) =>
+          item._id || index.toString()
+        }
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
@@ -71,3 +69,28 @@ export default function HomeView({ navigation }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F3F7FF",
+  },
+
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#1F2937",
+    marginTop: 15,
+    marginLeft: 15,
+  },
+
+  list: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 80,
+  },
+
+  row: {
+    justifyContent: "space-between",
+  },
+});
