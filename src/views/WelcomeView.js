@@ -26,18 +26,6 @@ export default function WelcomeView({ navigation }) {
       {/* 🐾 TÍTULO */}
       <Text style={styles.title}>PetAdopt</Text>
 
-      {/*  MASCOTAS ABAJO */}
-      <View style={styles.bottomContainer}>
-        <Image
-          source={{ uri: "https://placedog.net/412" }}
-          style={styles.bottomPet}
-        />
-        <Image
-          source={{ uri: "https://placedog.net/413" }}
-          style={styles.bottomPet}
-        />
-      </View>
-
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Main", { screen: "Swipe" })}
@@ -112,20 +100,6 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: "bold",
     color: "#fff",
-  },
-
-  //  ABAJO
-  bottomContainer: {
-    position: "absolute",
-    bottom: 100,
-    flexDirection: "row",
-    gap: 20,
-  },
-
-  bottomPet: {
-    width: 110,
-    height: 110,
-    borderRadius: 25,
   },
 
   //  BOTÓN

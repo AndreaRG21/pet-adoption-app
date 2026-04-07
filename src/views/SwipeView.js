@@ -21,7 +21,7 @@ export default function SwipeView({ navigation }) {
 
   const nextPet = () => {
     if (index < pets.length - 1) {
-      setIndex(index + 1);
+      setIndex((prev) => prev + 1);
       position.setValue({ x: 0, y: 0 });
     } else {
       setFinished(true);
@@ -29,23 +29,23 @@ export default function SwipeView({ navigation }) {
   };
 
   const handleLike = () => {
-    setLikedPets([...likedPets, pets[index]]);
+    setLikedPets((prev) => [...prev, pets[index]]);
 
     Animated.timing(position, {
       toValue: { x: 400, y: 0 },
       duration: 300,
       useNativeDriver: false,
-    }).start(nextPet);
+    }).start(() => nextPet());
   };
 
   const handleDislike = () => {
-    setDislikedPets([...dislikedPets, pets[index]]);
+    setDislikedPets((prev) => [...prev, pets[index]]);
 
     Animated.timing(position, {
       toValue: { x: -400, y: 0 },
       duration: 300,
       useNativeDriver: false,
-    }).start(nextPet);
+    }).start(() => nextPet());
   };
 
   const animatedStyle = {
@@ -65,28 +65,22 @@ export default function SwipeView({ navigation }) {
           )}
 
           <View style={styles.buttons}>
-            <ActionButtons
-              onLike={handleLike}
-              onDislike={handleDislike}
-            />
+            <ActionButtons onLike={handleLike} onDislike={handleDislike} />
           </View>
-
-        
-            
-              
         </>
       ) : (
         <View style={styles.endContainer}>
-          <Text style={styles.endText}>
-            No hay más mascotas 🐶
-          </Text>
+          <Text style={styles.endText}>No hay más mascotas 🐶</Text>
 
           <TouchableOpacity
             style={styles.btn}
             onPress={() =>
               navigation.navigate("Main", {
-                screen: "Solicitudes",
-                params: { likedPets },
+                screen: "Solicitudes", // 👈 asegúrate que así se llama tu tab
+                params: {
+                  likedPets,
+                  dislikedPets, // 🔥 YA SE MANDA
+                },
               })
             }
           >
@@ -119,11 +113,6 @@ const styles = StyleSheet.create({
   },
 
   buttons: {
-    marginTop: 20,
-  },
-
-  navButtons: {
-    flexDirection: "row",
     marginTop: 20,
   },
 

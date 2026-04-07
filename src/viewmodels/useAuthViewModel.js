@@ -1,59 +1,49 @@
-// src/viewmodels/useAuthViewModel.js
-import { useState } from 'react';
-import * as Keychain from 'react-native-keychain';
+import { useState } from "react";
+import { userAPI } from "../models/api";
+import StorageService from "../helpers/StorageService";
 
-export const useAuthViewModel = () => {
+export function useAuthViewModel() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // GUARDAR TOKEN (Login/Registro)
-  const saveSecureToken = async (token) => {
-    try {
-      // Guardamos el token usando el email como 'username' para identificarlo
-      await Keychain.setGenericPassword(email, token, {
-        service: 'petadopt_auth_token', // Identificador único para tu app
-      });
-    } catch (err) {
-      console.error("Error guardando en Keychain:", err);
-    }
-  };
-
-  // RECUPERAR TOKEN (Para persistencia de sesión)
-  const getSecureToken = async () => {
-    try {
-      const credentials = await Keychain.getGenericPassword({
-        service: 'petadopt_auth_token',
-      });
-      if (credentials) {
-        return credentials.password; // Aquí está tu JWT
-      }
-      return null;
-    } catch (err) {
-      console.error("Error leyendo de Keychain:", err);
-      return null;
-    }
-  };
-
   const handleLogin = async (navigation) => {
-    // ... validaciones de Regex previas ...
+    setError("");
 
-    // Mock de Login exitoso para Sprint 1
-    if (email === "admin@test.com" && password === "12345678") {
-      const mockJWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // Simulación de token
-      
-      await saveSecureToken(mockJWT); // REQUERIMIENTO SPRINT 1: Seguridad activa
-      setError("");
-      navigation.navigate("Main");
-    } else {
-      setError("Credenciales incorrectas");
+    try {
+      const response = await userAPI.login({
+        email,
+        password,
+      });
+
+      const { token, user } = response.data;
+
+     
+      await StorageService.saveToken(token);
+
+      console.log("Login exitoso:", user);
+
+      navigation.replace("Home");
+
+    } catch (err) {
+      console.log("Login error:", err);
+
+      if (err.response?.status === 401) {
+        setError("Credenciales incorrectas");
+      } else if (err.response?.status === 404) {
+        setError("Usuario no encontrado");
+      } else {
+        setError("Error de conexión, intenta de nuevo");
+      }
     }
   };
 
   return {
-    email, setEmail,
-    password, setPassword,
-    error, handleLogin,
-    getSecureToken 
+    email,
+    setEmail,
+    password,
+    setPassword,
+    error,
+    handleLogin,
   };
-};
+}

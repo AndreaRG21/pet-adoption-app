@@ -26,7 +26,12 @@ api.interceptors.request.use(
         return Promise.reject(error); 
     }
 );
+export const userAPI = {
+  login: (data) => api.post("/api/user/login", data),
+  register: (data) => api.post("/api/user/register", data),
+};
 export const ENDPOINTS = {
-        register: (data) => api.post("/api/user/register", data),
+        register: "/api/user/register",
+        login: "/api/user/login",
 };
 export default api;

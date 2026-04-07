@@ -3,7 +3,7 @@ import * as Keychain from 'react-native-keychain';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const StorageService = {
-  // TOKEN SEGURO (Keychain) - Requerimiento Sprint 1
+
   async saveToken(token) {
     try {
       await Keychain.setGenericPassword('userToken', token, {
@@ -29,7 +29,7 @@ const StorageService = {
     await Keychain.resetGenericPassword({ service: 'petadopt_auth' });
   },
 
-  // DATOS NO SENSIBLES (AsyncStorage) - Requerimiento Modo Offline
+ 
   async saveUserData(data) {
     await AsyncStorage.setItem('userData', JSON.stringify(data));
   },

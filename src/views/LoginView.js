@@ -1,97 +1,66 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Pressable,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuthViewModel } from "../viewmodels/useAuthViewModel";
 
 export default function LoginView({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const { email, setEmail, password, setPassword, error, handleLogin } = useAuthViewModel();
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleLogin = () => {
-    const cleanEmail = email.trim().toLowerCase();
-    const cleanPassword = password.trim();
-
-    if (cleanEmail === "admin@test.com" && cleanPassword === "12345678") {
-      setError("");
-      navigation.navigate("Main", { screen: "Swipe" });
-    } else {
-      setError("Correo o contraseña incorrectos");
-    }
-  };
 
   return (
     <View style={styles.container}>
-      {/* HEADER */}
-      <Text style={styles.logo}>🐾 PetAdopt</Text>
-      <Text style={styles.subtitle}>Find your best friend</Text>
-
-      {/* CARD */}
+      <Text style={styles.logo}>PetAdopt 🐾</Text>
+      
       <View style={styles.card}>
-        {/* TABS */}
         <View style={styles.tabs}>
-          <Text style={styles.activeTab}>Login</Text>
-
-          <Pressable onPress={() => navigation.navigate("SignUp")}>
-            <Text style={styles.inactiveTab}>Sign Up</Text>
-          </Pressable>
-        </View>
-
-        {/* EMAIL */}
-        <View style={styles.inputBox}>
-          <Ionicons name="mail-outline" size={20} color="#888" />
-          <TextInput
-            placeholder="Email"
-            style={styles.input}
-            onChangeText={setEmail}
-            value={email}
-            keyboardType="email-address"
-          />
-        </View>
-
-        {/* PASSWORD */}
-        <View style={styles.inputBox}>
-          <Ionicons name="lock-closed-outline" size={20} color="#888" />
-
-          <TextInput
-            placeholder="Password"
-            secureTextEntry={!showPassword}
-            style={styles.input}
-            onChangeText={setPassword}
-            value={password}
-          />
-
-          <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-          >
-            <Ionicons
-              name={showPassword ? "eye-off-outline" : "eye-outline"}
-              size={20}
-              color="#888"
-            />
+          <Text style={styles.activeTab}>login</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+            <Text style={styles.inactiveTab}>sign up</Text>
           </TouchableOpacity>
         </View>
 
-        {/* ERROR */}
-        {error !== "" && <Text style={styles.error}>{error}</Text>}
+        <Text style={styles.label}>Email</Text>
+        <View style={styles.inputBox}>
+          <TextInput 
+            style={styles.input} 
+            value={email} 
+            onChangeText={setEmail} 
+            placeholder="Value"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+        </View>
 
-        {/* BUTTON */}
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.label}>Password</Text>
+        <View style={styles.inputBox}>
+          <TextInput 
+            style={styles.input} 
+            value={password} 
+            onChangeText={setPassword} 
+            placeholder="Value"
+            secureTextEntry={!showPassword}
+          />
+          <Ionicons 
+            name={showPassword ? "eye-off" : "eye"} 
+            size={20} 
+            onPress={() => setShowPassword(!showPassword)} 
+          />
+        </View>
+
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+        <TouchableOpacity style={styles.button} onPress={() => handleLogin(navigation)}>
           <Text style={styles.buttonText}>SIGN IN</Text>
         </TouchableOpacity>
-
-        {/* FORGOT */}
-        <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
-          <Text style={styles.forgot}>Forgot password?</Text>
-        </TouchableOpacity>
+        
+        <Text style={styles.forgotText}>Forgot password?</Text>
       </View>
+
+      
+      <Image 
+        source={{ uri: 'https://tu-link-al-perro.png' }} 
+        style={styles.dogImage} 
+      />
     </View>
   );
 }
@@ -100,61 +69,65 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#2F6BFF",
-    justifyContent: "center",
     alignItems: "center",
+    paddingTop: 80,
   },
 
   logo: {
     fontSize: 32,
+    color: "#fff", // 🔥 corregido (antes decía ycolor)
     fontWeight: "bold",
-    color: "#fff",
-  },
-
-  subtitle: {
-    color: "#E6E6E6",
-    marginBottom: 20,
+    marginBottom: 40,
   },
 
   card: {
-    width: "88%",
+    width: "85%",
     backgroundColor: "#fff",
-    borderRadius: 22,
-    padding: 22,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 6,
+    borderRadius: 30,
+    padding: 25,
+    zIndex: 2,
+    elevation: 5, // 🔥 sombra en Android
+    shadowColor: "#000", // 🔥 sombra iOS
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
   },
 
   tabs: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 20,
+    justifyContent: "center",
+    gap: 30,
+    marginBottom: 25,
   },
 
   activeTab: {
-    fontSize: 16,
-    fontWeight: "bold",
     color: "#2F6BFF",
+    fontWeight: "bold",
+    fontSize: 18,
     borderBottomWidth: 2,
     borderColor: "#2F6BFF",
     paddingBottom: 5,
   },
 
   inactiveTab: {
-    fontSize: 16,
     color: "#999",
+    fontSize: 18,
+  },
+
+  label: {
+    color: "#333",
+    marginBottom: 5,
+    fontWeight: "600",
   },
 
   inputBox: {
+    backgroundColor: "#FFF",
+    borderWidth: 1,
+    borderColor: "#DDD",
+    borderRadius: 12, // 🔥 más moderno
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#E6E6E6",
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    marginBottom: 12,
-    backgroundColor: "#FAFAFA",
+    paddingRight: 10,
+    marginBottom: 15,
   },
 
   input: {
@@ -163,7 +136,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: "#FFA726",
+    backgroundColor: "#F5A623",
     padding: 15,
     borderRadius: 12,
     alignItems: "center",
@@ -173,19 +146,29 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
-    letterSpacing: 1,
+    fontSize: 14,
   },
 
-  forgot: {
-    textAlign: "center",
-    marginTop: 12,
-    color: "#2F6BFF",
-    fontWeight: "500",
-  },
-
-  error: {
+  errorText: {
     color: "red",
-    textAlign: "center",
+    fontSize: 12,
     marginBottom: 10,
+    textAlign: "center",
+  },
+
+  forgotText: {
+    textAlign: "center",
+    marginTop: 15,
+    color: "#666",
+    fontSize: 12,
+  },
+
+  dogImage: {
+    width: 300,
+    height: 200,
+    position: "absolute",
+    bottom: 0,
+    right: -50,
+    opacity: 0.9,
   },
 });

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function ProfileView() {
+export default function ProfileView({ navigation }) {
   const user = {
     name: "Andrea",
     email: "andrea@email.com",
@@ -17,7 +17,7 @@ export default function ProfileView() {
       "https://th.bing.com/th/id/OIP.NHjcr1WQVs8OyUrNzBaCAQHaIN?w=169&h=188&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
   };
 
-  // 🔥 componente opción premium
+  //  componente opción premium
   const Option = ({ title, icon }) => {
     const scale = new Animated.Value(1);
 
@@ -55,9 +55,7 @@ export default function ProfileView() {
 
   return (
     <View style={styles.container}>
-
-
-      {/* 👤 Avatar editable */}
+     
       <TouchableOpacity activeOpacity={0.8}>
         <Image source={{ uri: user.image }} style={styles.avatar} />
 
@@ -71,17 +69,20 @@ export default function ProfileView() {
       <Text style={styles.name}>{user.name}</Text>
       <Text style={styles.email}>{user.email}</Text>
 
-      {/* ⚪ Card */}
+      {/*  Card */}
       <View style={styles.card}>
         <Option title="Editar perfil" icon="person-outline" />
         <Option title="Información personal" icon="document-text-outline" />
-       
+
         <Option title="Seguridad" icon="lock-closed-outline" />
         <Option title="Acerca de" icon="information-circle-outline" />
       </View>
 
-      {/* 🔴 Logout */}
-      <TouchableOpacity style={styles.logoutButton}>
+      {/*  Logout */}
+      <TouchableOpacity
+        style={styles.logoutButton}
+        onPress={() => navigation.navigate("Login")}
+      >
         <Ionicons name="log-out-outline" size={18} color="#fff" />
         <Text style={styles.logoutText}>Cerrar sesión</Text>
       </TouchableOpacity>
