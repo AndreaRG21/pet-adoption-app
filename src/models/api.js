@@ -3,7 +3,7 @@ import StorageService from '../helpers/StorageService';
 
 const api = axios.create({
     baseURL: "https://petadopt-ejkh.onrender.com",
-    timeout: 15000, // Aumentado a 15s porque Render (free tier) tarda en despertar
+    timeout: 60000, 
     headers: {
         'Content-Type': 'application/json'
     }
@@ -26,5 +26,7 @@ api.interceptors.request.use(
         return Promise.reject(error); 
     }
 );
-
+export const ENDPOINTS = {
+        register: (data) => api.post("/api/user/register", data),
+};
 export default api;
