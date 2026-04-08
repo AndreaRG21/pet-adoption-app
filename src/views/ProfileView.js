@@ -55,7 +55,7 @@ export default function ProfileView({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* 👤 Avatar editable */}
+     
       <TouchableOpacity activeOpacity={0.8}>
         <Image source={{ uri: user.image }} style={styles.avatar} />
 

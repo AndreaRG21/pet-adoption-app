@@ -1,3 +1,4 @@
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -5,15 +6,15 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { useRef, useState } from "react";
-import { pets } from "../data/pets";
+
 import SwipeCard from "../components/SwipeCard";
 import ActionButtons from "../components/ActionButtons";
-import { useContext } from "react";
-import { PetsContext } from "../context/PetsContext";
 import TopBar from "../components/TopBar";
+import { PetsContext } from "../context/PetsContext";
+import { petAPI } from "../models/api";
 
 export default function SwipeView({ navigation }) {
+  const [pets, setPets] = useState([]);
   const [index, setIndex] = useState(0);
   const [finished, setFinished] = useState(false);
 
@@ -21,6 +22,21 @@ export default function SwipeView({ navigation }) {
     useContext(PetsContext);
 
   const position = useRef(new Animated.ValueXY()).current;
+
+  // 🔥 CARGAR MASCOTAS DESDE API
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const res = await petAPI.getAllPets();
+        console.log("SWIPE API:", res.data);
+        const data = res.data?.pets || res.data?.data || res.data || [];
+        setPets(data);
+      } catch (error) {
+        console.log("Error cargando mascotas:", error);
+      }
+    };
+    fetchPets();
+  }, []);
 
   const nextPet = () => {
     if (index < pets.length - 1) {
@@ -32,8 +48,8 @@ export default function SwipeView({ navigation }) {
   };
 
   const handleLike = () => {
+    if (!pets[index]) return;
     setLikedPets((prev) => [...prev, pets[index]]);
-
     Animated.timing(position, {
       toValue: { x: 400, y: 0 },
       duration: 300,
@@ -42,8 +58,8 @@ export default function SwipeView({ navigation }) {
   };
 
   const handleDislike = () => {
+    if (!pets[index]) return;
     setDislikedPets((prev) => [...prev, pets[index]]);
-
     Animated.timing(position, {
       toValue: { x: -400, y: 0 },
       duration: 300,
@@ -63,6 +79,15 @@ export default function SwipeView({ navigation }) {
     position.setValue({ x: 0, y: 0 });
   };
 
+  // 🔥 LOADING
+  if (!pets.length) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ color: "#fff" }}>Cargando mascotas...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <TopBar />
@@ -80,6 +105,24 @@ export default function SwipeView({ navigation }) {
           ) : (
             <View style={styles.endContainer}>
               <Text style={styles.endText}>No hay más mascotas 🐶</Text>
+
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() =>
+                  navigation.navigate("Main", {
+                    screen: "Solicitudes",
+                  })
+                }
+              >
+                <Text style={styles.btnText}>Ver Solicitudes</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.btn, { marginTop: 10 }]}
+                onPress={resetSwipe}
+              >
+                <Text style={styles.btnText}>Reiniciar Swipe</Text>
+              </TouchableOpacity>
             </View>
           )}
         </View>
@@ -95,65 +138,44 @@ export default function SwipeView({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+  },
   content: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-  },
-
-  content: {
-    flex: 1,
-  },
-
   centerArea: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-
   buttons: {
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 40,
     width: "100%",
   },
-
-  title: {
-    position: "absolute",
-    top: 60,
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
-  },
-
   cardContainer: {
     alignItems: "center",
   },
-
   btn: {
     backgroundColor: "#fff",
-    padding: 10,
+    padding: 12,
     borderRadius: 15,
     marginHorizontal: 5,
-    marginTop: 20,
   },
-
   btnText: {
     color: "#2F6BFF",
     fontWeight: "bold",
   },
-
   endContainer: {
     alignItems: "center",
   },
-
   endText: {
-    color: "#fff",
+    color: "#1F2937",
     fontSize: 18,
     marginBottom: 20,
   },

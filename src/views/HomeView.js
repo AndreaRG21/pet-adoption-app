@@ -1,16 +1,45 @@
 import {
   View,
   FlatList,
-  TouchableOpacity,
   Text,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 
-import { pets } from "../data/pets";
+import { useEffect, useState } from "react";
 import PetCard from "../components/PetCard";
 import TopBar from "../components/TopBar";
+import { petAPI } from "../models/api";
 
 export default function HomeView({ navigation }) {
+  const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const res = await petAPI.getAllPets();
+        console.log("API:", res.data);
+        const data = res.data?.pets || res.data?.data || res.data || [];
+        setPets(data);
+      } catch (error) {
+        console.log("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPets();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Cargando mascotas...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <TopBar />
@@ -21,20 +50,19 @@ export default function HomeView({ navigation }) {
         <Text style={styles.subtitle}>Encuentra tu match ideal 🐶</Text>
       </View>
 
-      {/* LISTA */}
+      {/* LISTA DE MASCOTAS */}
       <FlatList
         data={pets}
         numColumns={2}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => item._id || index.toString()}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <PetCard pet={item} navigation={navigation} />
         )}
       />
 
-      {/* 🔥 BOTÓN FLOTANTE */}
+      {/* BOTÓN FLOTANTE */}
       <TouchableOpacity
         style={styles.fab}
         onPress={() => navigation.navigate("AddPet")}
@@ -79,20 +107,17 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  // 🔥 FAB (Floating Action Button)
+  // FAB (Floating Action Button)
   fab: {
     position: "absolute",
     bottom: 25,
     alignSelf: "center",
-
     backgroundColor: "#2F6BFF",
     width: 65,
     height: 65,
     borderRadius: 35,
-
     justifyContent: "center",
     alignItems: "center",
-
     shadowColor: "#2F6BFF",
     shadowOpacity: 0.4,
     shadowRadius: 10,

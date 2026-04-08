@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import {
   View,
@@ -73,6 +74,36 @@ export default function SolicitudesView() {
           )}
         />
       </View>
+=======
+import { View, Text, StyleSheet, FlatList } from "react-native";
+
+export default function SolicitudesView({ route }) {
+  const { likedPets = [], dislikedPets = [] } = route.params || {};
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Solicitudes ❤️</Text>
+
+      <Text style={styles.subtitle}>Mascotas que te gustaron:</Text>
+
+      <FlatList
+        data={likedPets}
+        keyExtractor={(item, index) => item._id || index.toString()}
+        renderItem={({ item }) => (
+          <Text style={styles.item}>{item.name}</Text>
+        )}
+      />
+
+      <Text style={styles.subtitle}>No te gustaron:</Text>
+
+      <FlatList
+        data={dislikedPets}
+        keyExtractor={(item, index) => item._id || index.toString()}
+        renderItem={({ item }) => (
+          <Text style={styles.item}>{item.name}</Text>
+        )}
+      />
+>>>>>>> 30425a0af6f631f3d9242a8cc8f45c29da810b63
     </View>
   );
 }
@@ -80,92 +111,30 @@ export default function SolicitudesView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2F6BFF",
+    padding: 20,
+    backgroundColor: "#F3F7FF",
   },
+<<<<<<< HEAD
   content: {
     flex: 1,
     padding: 20,
   },
 
+=======
+>>>>>>> 30425a0af6f631f3d9242a8cc8f45c29da810b63
   title: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: "bold",
-    color: "#fff",
-    textAlign: "center",
-    marginTop: 50,
+    marginBottom: 10,
   },
-
-  tabs: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+  subtitle: {
+    marginTop: 15,
+    fontWeight: "bold",
+  },
+  item: {
+    padding: 10,
     backgroundColor: "#fff",
-    marginTop: 20,
-    paddingVertical: 10,
-  },
-
-  tab: {
-    fontSize: 16,
-    color: "#888",
-  },
-
-  activeTab: {
-    color: "#000",
-    fontWeight: "bold",
-    borderBottomWidth: 3,
-    borderColor: "#FFA726",
-  },
-
-  list: {
-    padding: 15,
-  },
-
-  card: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 15,
-    marginBottom: 15,
-    alignItems: "center",
-  },
-
-  image: {
-    width: 70,
-    height: 70,
+    marginVertical: 5,
     borderRadius: 10,
-    marginRight: 10,
-  },
-
-  name: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-
-  pending: {
-    color: "#4F8EF7",
-    marginTop: 5,
-  },
-
-  progressBar: {
-    height: 6,
-    backgroundColor: "#ddd",
-    borderRadius: 10,
-    marginTop: 5,
-    overflow: "hidden",
-  },
-
-  progressFill: {
-    width: "60%",
-    height: "100%",
-    backgroundColor: "#4F8EF7",
-  },
-
-  approved: {
-    color: "green",
-    fontWeight: "bold",
-    marginTop: 5,
-  },
-
-  contact: {
-    color: "#555",
   },
 });
