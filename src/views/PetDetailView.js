@@ -1,4 +1,11 @@
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useEffect, useState } from "react";
 import { petAPI } from "../models/api";
 
@@ -40,16 +47,11 @@ export default function PetDetailView({ route, navigation }) {
 
   return (
     <ScrollView style={styles.container}>
-
       {/* IMAGEN */}
-      <Image 
-  source={{ uri:imageUrl}} 
-  style={styles.image} 
-/>
+      <Image source={{ uri: imageUrl }} style={styles.image} />
 
       {/* CARD */}
       <View style={styles.card}>
-
         <Text style={styles.name}>{pet.name}</Text>
 
         <View style={styles.badge}>
@@ -58,7 +60,6 @@ export default function PetDetailView({ route, navigation }) {
 
         {/* TABLA PROFESIONAL */}
         <View style={styles.table}>
-
           <View style={styles.row}>
             <Text style={styles.cellLabel}>Especie</Text>
             <Text style={styles.cellValue}>{pet.species}</Text>
@@ -93,7 +94,6 @@ export default function PetDetailView({ route, navigation }) {
             <Text style={styles.cellLabel}>Discapacidad</Text>
             <Text style={styles.cellValue}>{pet.disabilities}</Text>
           </View>
-
         </View>
 
         {/* DESCRIPCIÓN */}
@@ -103,14 +103,15 @@ export default function PetDetailView({ route, navigation }) {
         {/* REQUISITOS */}
         <Text style={styles.section}>Requisitos</Text>
         {pet.requirements?.map((req, index) => (
-          <Text key={index} style={styles.requirement}>• {req}</Text>
+          <Text key={index} style={styles.requirement}>
+            • {req}
+          </Text>
         ))}
 
         {/* BOTÓN ADOPTAR */}
         <TouchableOpacity style={styles.button} onPress={handleAdopt}>
           <Text style={styles.buttonText}>🐾 Adoptar ahora</Text>
         </TouchableOpacity>
-
       </View>
     </ScrollView>
   );

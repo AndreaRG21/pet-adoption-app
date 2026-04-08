@@ -1,39 +1,80 @@
 import React, { useState, useContext } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { PetsContext } from "../context/PetsContext";
 
-export default function SolicitudesView() {
-  const { likedPets, dislikedPets } = useContext(PetsContext);
-  const [activeTab, setActiveTab] = useState("liked");
+export default function MisAdopcionesView() {
+  const { inProcessPets, adoptedPets } = useContext(PetsContext); // nuevo contexto
+  const [activeTab, setActiveTab] = useState("inProcess");
 
   const tabs = [
-    { key: "liked", label: "Mascotas que te gustaron" },
-    { key: "disliked", label: "Mascotas que no te gustaron" },
+    { key: "inProcess", label: "En Proceso" },
+    { key: "adopted", label: "Adoptadas" },
   ];
+
+  const renderPetCard = (pet) => (
+    <View style={styles.card}>
+      {pet.photo && (
+        <Image source={{ uri: pet.photo }} style={styles.petImage} />
+      )}
+      <Text style={styles.petName}>{pet.name}</Text>
+      {pet.species && (
+        <Text style={styles.petInfo}>Especie: {pet.species}</Text>
+      )}
+      {pet.requestDate && activeTab === "inProcess" && (
+        <Text style={styles.petInfo}>Solicitud: {pet.requestDate}</Text>
+      )}
+      {pet.adoptionDate && activeTab === "adopted" && (
+        <Text style={styles.petInfo}>Adoptada: {pet.adoptionDate}</Text>
+      )}
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Mis Solicitudes ❤️</Text>
+      <Text style={styles.title}>Mis Mascotas</Text>
 
-      {/* 🔘 Tabs simples */}
+      {/* Tabs */}
       <View style={styles.tabs}>
         {tabs.map((tab) => (
-          <Text
+          <TouchableOpacity
             key={tab.key}
-            style={[styles.tab, activeTab === tab.key && styles.activeTab]}
+            style={[
+              styles.tabButton,
+              activeTab === tab.key && styles.activeTabButton,
+            ]}
             onPress={() => setActiveTab(tab.key)}
           >
-            {tab.label}
-          </Text>
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === tab.key && styles.activeTabText,
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
         ))}
       </View>
 
-      {/* 🐶 Lista según tab activo */}
       <FlatList
-        data={activeTab === "liked" ? likedPets : dislikedPets}
+        data={activeTab === "inProcess" ? inProcessPets : adoptedPets}
         keyExtractor={(item, index) => item._id || index.toString()}
-        contentContainerStyle={styles.list}
-        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>
+            {activeTab === "inProcess"
+              ? "No tienes solicitudes en proceso"
+              : "No has adoptado mascotas aún"}
+          </Text>
+        }
+        renderItem={({ item }) => renderPetCard(item)}
       />
     </View>
   );
@@ -42,34 +83,70 @@ export default function SolicitudesView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#F3F7FF",
+    backgroundColor: "#2F6BFF",
+    paddingTop: 60,
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 10,
+    color: "#fff",
+    marginBottom: 20,
+    textAlign: "center",
   },
   tabs: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 15,
+    marginBottom: 20,
   },
-  tab: {
-    fontWeight: "bold",
-    color: "#777",
+  tabButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    backgroundColor: "#ffffff33",
   },
-  activeTab: {
-    color: "#2F6BFF",
-    textDecorationLine: "underline",
-  },
-  list: {
-    paddingBottom: 100,
-  },
-  item: {
-    padding: 10,
+  activeTabButton: {
     backgroundColor: "#fff",
-    marginVertical: 5,
-    borderRadius: 10,
+  },
+  tabText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  activeTabText: {
+    color: "#2F6BFF",
+  },
+  card: {
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 15,
+    marginBottom: 15,
+    alignItems: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+  },
+  petImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 12,
+    marginBottom: 10,
+  },
+  petName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#333",
+  },
+  petInfo: {
+    fontSize: 14,
+    color: "#555",
+  },
+  emptyText: {
+    textAlign: "center",
+    marginTop: 50,
+    color: "#fff",
+    fontStyle: "italic",
+    fontSize: 16,
   },
 });

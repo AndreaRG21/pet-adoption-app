@@ -1,54 +1,78 @@
-import React, { useContext } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import React, { useState, useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { PetsContext } from "../context/PetsContext";
-import TopBar from "../components/TopBar";
 
 export default function HistorialView() {
   const { likedPets, dislikedPets } = useContext(PetsContext);
+  const [activeTab, setActiveTab] = useState("liked");
 
-  const renderItem = (item) => (
+  const tabs = [
+    { key: "liked", label: "❤️ Likes" },
+    { key: "disliked", label: "❌ Dislikes" },
+  ];
+
+  const renderPetCard = (pet) => (
     <View style={styles.card}>
-      <Text style={styles.petName}>{item.name}</Text>
+      {/* Puedes agregar imagen si tienes URL */}
+      {pet.photo && (
+        <Image source={{ uri: pet.photo }} style={styles.petImage} />
+      )}
+      <Text style={styles.petName}>{pet.name}</Text>
+      {pet.age && <Text style={styles.petInfo}>Age: {pet.age}</Text>}
+      {pet.species && (
+        <Text style={styles.petInfo}>Species: {pet.species}</Text>
+      )}
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <TopBar />
+      <Text style={styles.title}>Mis Solicitudes</Text>
 
-      <View style={styles.content}>
-        <Text style={styles.title}>Historial</Text>
-
-        {/* LIKES */}
-        <Text style={styles.subtitle}>❤️ Likes</Text>
-        {likedPets.length === 0 ? (
-          <Text style={styles.empty}>No hay likes aún</Text>
-        ) : (
-          <FlatList
-            data={likedPets}
-            keyExtractor={(item) =>
-              item.id?.toString() || Math.random().toString()
-            }
-            renderItem={({ item }) => renderItem(item)}
-            contentContainerStyle={styles.list}
-          />
-        )}
-
-        {/* DISLIKES */}
-        <Text style={styles.subtitle}>❌ Dislikes</Text>
-        {dislikedPets.length === 0 ? (
-          <Text style={styles.empty}>No hay dislikes aún</Text>
-        ) : (
-          <FlatList
-            data={dislikedPets}
-            keyExtractor={(item) =>
-              item.id?.toString() || Math.random().toString()
-            }
-            renderItem={({ item }) => renderItem(item)}
-            contentContainerStyle={styles.list}
-          />
-        )}
+      {/* Tabs */}
+      <View style={styles.tabs}>
+        {tabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.key}
+            style={[
+              styles.tabButton,
+              activeTab === tab.key && styles.activeTabButton,
+            ]}
+            onPress={() => setActiveTab(tab.key)}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === tab.key && styles.activeTabText,
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
+
+      {/* Lista de mascotas */}
+      <FlatList
+        data={activeTab === "liked" ? likedPets : dislikedPets}
+        keyExtractor={(item, index) => item._id || index.toString()}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>
+            {activeTab === "liked"
+              ? "No hay mascotas que te gustaron aún"
+              : "No hay mascotas que no te gustaron aún"}
+          </Text>
+        }
+        renderItem={({ item }) => renderPetCard(item)}
+      />
     </View>
   );
 }
@@ -56,49 +80,70 @@ export default function HistorialView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F3F7FF",
-  },
-  content: {
-    flex: 1,
-    padding: 20,
+    backgroundColor: "#ffffff",
+    paddingTop: 60,
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 26,
-    color: "#2F6BFF", // visible sobre fondo claro
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 15,
+    color: "#2F6BFF",
+    marginBottom: 20,
+    textAlign: "center",
   },
-  subtitle: {
-    fontSize: 18,
-    color: "#2F6BFF", // visible
-    marginTop: 10,
-    marginBottom: 5,
+  tabs: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 20,
+  },
+  tabButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    backgroundColor: "#ffffff33",
+  },
+  activeTabButton: {
+    backgroundColor: "#2F6BFF",
+  },
+  tabText: {
+    color: "#2F6BFF",
     fontWeight: "bold",
   },
-  list: {
-    paddingBottom: 10,
-    flexGrow: 0,
+  activeTabText: {
+    color: "#ffffff",
   },
   card: {
     backgroundColor: "#2F6BFF",
     padding: 15,
     borderRadius: 15,
-    marginBottom: 10,
-    // sombra iOS
+    marginBottom: 15,
+    alignItems: "center",
+    elevation: 3, // sombra Android
     shadowColor: "#000",
     shadowOpacity: 0.1,
-    shadowRadius: 20,
-    // sombra Android
-    elevation: 3,
+    shadowRadius: 10, // sombra iOS
+  },
+  petImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 12,
+    marginBottom: 10,
   },
   petName: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#fff", // contraste con azul
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#333",
   },
-  empty: {
-    color: "#9CA3AF",
+  petInfo: {
+    fontSize: 14,
+    color: "#555",
+  },
+  emptyText: {
+    textAlign: "center",
+    marginTop: 50,
+    color: "#fff",
     fontStyle: "italic",
-    marginBottom: 10,
+    fontSize: 16,
   },
 });
