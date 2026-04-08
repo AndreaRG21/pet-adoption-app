@@ -59,12 +59,22 @@ export default function SwipeView({ navigation }) {
 
   const handleDislike = () => {
     if (!pets[index]) return;
-    setDislikedPets((prev) => [...prev, pets[index]]);
+
+    // Guardar la mascota actual
+    const currentPet = pets[index];
+    setDislikedPets((prev) => [...prev, currentPet]);
+
     Animated.timing(position, {
       toValue: { x: -400, y: 0 },
       duration: 300,
       useNativeDriver: false,
-    }).start(() => nextPet());
+    }).start(() => {
+      if (index < pets.length - 1) {
+        nextPet();
+      } else {
+        setFinished(true);
+      }
+    });
   };
 
   const animatedStyle = {

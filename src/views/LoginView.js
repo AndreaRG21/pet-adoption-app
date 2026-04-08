@@ -1,16 +1,24 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuthViewModel } from "../viewmodels/useAuthViewModel";
 
 export default function LoginView({ navigation }) {
-  const { email, setEmail, password, setPassword, error, handleLogin } = useAuthViewModel();
+  const { email, setEmail, password, setPassword, error, handleLogin } =
+    useAuthViewModel();
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>PetAdopt 🐾</Text>
-      
+
       <View style={styles.card}>
         <View style={styles.tabs}>
           <Text style={styles.activeTab}>login</Text>
@@ -21,11 +29,11 @@ export default function LoginView({ navigation }) {
 
         <Text style={styles.label}>Email</Text>
         <View style={styles.inputBox}>
-          <TextInput 
-            style={styles.input} 
-            value={email} 
-            onChangeText={setEmail} 
-            placeholder="Value"
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email"
             keyboardType="email-address"
             autoCapitalize="none"
           />
@@ -33,33 +41,35 @@ export default function LoginView({ navigation }) {
 
         <Text style={styles.label}>Password</Text>
         <View style={styles.inputBox}>
-          <TextInput 
-            style={styles.input} 
-            value={password} 
-            onChangeText={setPassword} 
-            placeholder="Value"
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Password"
             secureTextEntry={!showPassword}
           />
-          <Ionicons 
-            name={showPassword ? "eye-off" : "eye"} 
-            size={20} 
-            onPress={() => setShowPassword(!showPassword)} 
+          <Ionicons
+            name={showPassword ? "eye-off" : "eye"}
+            size={20}
+            onPress={() => setShowPassword(!showPassword)}
           />
         </View>
 
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-        <TouchableOpacity style={styles.button} onPress={() => handleLogin(navigation)}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => handleLogin(navigation)}
+        >
           <Text style={styles.buttonText}>SIGN IN</Text>
         </TouchableOpacity>
-        
+
         <Text style={styles.forgotText}>Forgot password?</Text>
       </View>
 
-      
-      <Image 
-        source={{ uri: 'https://tu-link-al-perro.png' }} 
-        style={styles.dogImage} 
+      <Image
+        source={{ uri: "https://tu-link-al-perro.png" }}
+        style={styles.dogImage}
       />
     </View>
   );

@@ -35,9 +35,9 @@ export default function WelcomeView({ navigation }) {
       {/* 🔘 BOTÓN */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Main", { screen: "Swipe" })}
+        onPress={() => navigation.navigate("Login")} // 🔹 Cambiado a Login
       >
-        <Text style={styles.buttonText}>Entrar</Text>
+        <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
     </View>
   );
