@@ -1,20 +1,46 @@
-import { View, StyleSheet, Animated } from "react-native";
-import { useRef, useState } from "react";
-import { pets } from "../data/pets";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import {
+  View,
+  StyleSheet,
+  Animated,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+
 import SwipeCard from "../components/SwipeCard";
 import ActionButtons from "../components/ActionButtons";
-import { Text, TouchableOpacity } from "react-native";
-import FloatingButton from "../components/FloatingButton";
 import TopBar from "../components/TopBar";
+import { PetsContext } from "../context/PetsContext";
+import { petAPI } from "../models/api";
 
 export default function SwipeView({ navigation }) {
+  const [pets, setPets] = useState([]);
   const [index, setIndex] = useState(0);
   const [finished, setFinished] = useState(false);
+
+  const { likedPets, setLikedPets, dislikedPets, setDislikedPets } =
+    useContext(PetsContext);
+
   const position = useRef(new Animated.ValueXY()).current;
+
+  // 🔥 CARGAR MASCOTAS DESDE API
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const res = await petAPI.getAllPets();
+        console.log("SWIPE API:", res.data);
+        const data = res.data?.pets || res.data?.data || res.data || [];
+        setPets(data);
+      } catch (error) {
+        console.log("Error cargando mascotas:", error);
+      }
+    };
+    fetchPets();
+  }, []);
 
   const nextPet = () => {
     if (index < pets.length - 1) {
-      setIndex(index + 1);
+      setIndex((prev) => prev + 1);
       position.setValue({ x: 0, y: 0 });
     } else {
       setFinished(true);
@@ -22,48 +48,101 @@ export default function SwipeView({ navigation }) {
   };
 
   const handleLike = () => {
+    if (!pets[index]) return;
+    setLikedPets((prev) => [...prev, pets[index]]);
     Animated.timing(position, {
-      toValue: { x: 500, y: 0 },
+      toValue: { x: 400, y: 0 },
       duration: 300,
       useNativeDriver: false,
-    }).start(nextPet);
+    }).start(() => nextPet());
   };
 
   const handleDislike = () => {
+    if (!pets[index]) return;
+
+    // Guardar la mascota actual
+    const currentPet = pets[index];
+    setDislikedPets((prev) => [...prev, currentPet]);
+
     Animated.timing(position, {
-      toValue: { x: -500, y: 0 },
+      toValue: { x: -400, y: 0 },
       duration: 300,
       useNativeDriver: false,
-    }).start(nextPet);
+    }).start(() => {
+      if (index < pets.length - 1) {
+        nextPet();
+      } else {
+        setFinished(true);
+      }
+    });
   };
 
   const animatedStyle = {
-    transform: [{ translateX: position.x }, { translateY: position.y }],
+    transform: [{ translateX: position.x }],
   };
+
+  const resetSwipe = () => {
+    setIndex(0);
+    setFinished(false);
+    setLikedPets([]);
+    setDislikedPets([]);
+    position.setValue({ x: 0, y: 0 });
+  };
+
+  // 🔥 LOADING
+  if (!pets.length) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ color: "#fff" }}>Cargando mascotas...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <TopBar title="Descubre Mascotas 🐶" />
-      {!finished ? (
-        <>
-          {pets[index] && (
-            <Animated.View style={animatedStyle}>
-              <SwipeCard pet={pets[index]} />
-            </Animated.View>
+      <TopBar />
+
+      <View style={styles.content}>
+        <View style={styles.centerArea}>
+          {!finished ? (
+            <>
+              {pets[index] && (
+                <Animated.View style={[styles.cardContainer, animatedStyle]}>
+                  <SwipeCard pet={pets[index]} />
+                </Animated.View>
+              )}
+            </>
+          ) : (
+            <View style={styles.endContainer}>
+              <Text style={styles.endText}>No hay más mascotas 🐶</Text>
+
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() =>
+                  navigation.navigate("Main", {
+                    screen: "Solicitudes",
+                  })
+                }
+              >
+                <Text style={styles.btnText}>Ver Solicitudes</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.btn, { marginTop: 10 }]}
+                onPress={resetSwipe}
+              >
+                <Text style={styles.btnText}>Reiniciar Swipe</Text>
+              </TouchableOpacity>
+            </View>
           )}
-
-          <ActionButtons onLike={handleLike} onDislike={handleDislike} />
-        </>
-      ) : (
-        <View style={styles.endContainer}>
-          <Text style={styles.endText}>No hay más mascotas 🐶</Text>
         </View>
-      )}
 
-      <FloatingButton
-        title="Catálogo"
-        onPress={() => navigation.navigate("Home")}
-      />
+        {!finished && (
+          <View style={styles.buttons}>
+            <ActionButtons onLike={handleLike} onDislike={handleDislike} />
+          </View>
+        )}
+      </View>
     </View>
   );
 }
@@ -71,26 +150,43 @@ export default function SwipeView({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#ffffff",
+  },
+  content: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  centerArea: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttons: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 40,
+    width: "100%",
+  },
+  cardContainer: {
+    alignItems: "center",
+  },
+  btn: {
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 15,
+    marginHorizontal: 5,
+  },
+  btnText: {
+    color: "#2F6BFF",
+    fontWeight: "bold",
   },
   endContainer: {
     alignItems: "center",
   },
-
   endText: {
-    fontSize: 20,
+    color: "#1F2937",
+    fontSize: 18,
     marginBottom: 20,
-  },
-
-  button: {
-    backgroundColor: "#4CAF50",
-    padding: 15,
-    borderRadius: 10,
-  },
-
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
   },
 });

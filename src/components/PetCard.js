@@ -1,26 +1,69 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
-export default function PetCard({ pet }) {
+export default function PetCard({ pet, navigation }) {
   return (
-    <View style={styles.card}>
-      <Image source={{ uri: pet.image }} style={styles.image} />
-      <Text>{pet.name}</Text>
-      <Text>{pet.breed}</Text>
-      <Text>{pet.age}</Text>
-    </View>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => navigation.navigate("PetDetail", { id: pet._id })}
+      activeOpacity={0.8}
+    >
+      <Image
+        source={{
+          uri: pet.image || pet.photo || "https://placedog.net/500",
+        }}
+        style={styles.image}
+      />
+
+      <View style={styles.infoContainer}>
+        <Text style={styles.name}>{pet.name}</Text>
+        <Text style={styles.breed}>{pet.breed}</Text>
+        <Text style={styles.age}>{pet.age}</Text>
+      </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
+    flex: 1,
+    margin: 8,
     backgroundColor: "#fff",
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
+    borderRadius: 15,
+    overflow: "hidden",
+
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
   },
+
   image: {
     width: "100%",
-    height: 150,
-    borderRadius: 10,
+    height: 140,
+    borderRadius: 15,
+  },
+
+  infoContainer: {
+    padding: 10,
+    alignItems: "center",
+  },
+
+  name: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+
+  breed: {
+    fontSize: 13,
+    color: "#777",
+    marginTop: 2,
+  },
+
+  age: {
+    fontSize: 12,
+    color: "#2F6BFF",
+    marginTop: 2,
+    fontWeight: "600",
   },
 });

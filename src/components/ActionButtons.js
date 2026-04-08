@@ -19,18 +19,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 20,
   },
-  like: {
-    backgroundColor: "#4CAF50",
-    padding: 20,
-    borderRadius: 50,
-    marginHorizontal: 20,
-  },
-  dislike: {
-    backgroundColor: "#F44336",
-    padding: 20,
-    borderRadius: 50,
-    marginHorizontal: 20,
-  },
+ like: {
+  backgroundColor: "#4CAF50",
+  padding: 18,
+  borderRadius: 50,
+  marginHorizontal: 20,
+  elevation: 5,
+},
+
+dislike: {
+  backgroundColor: "#F44336",
+  padding: 18,
+  borderRadius: 50,
+  marginHorizontal: 20,
+  elevation: 5,
+},
   text: {
     fontSize: 20,
     color: "#fff",

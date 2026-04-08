@@ -3,49 +3,72 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
-  Image,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useAuthViewModel } from "../viewmodels/useAuthViewModel";
+import { useRegister } from "../hooks/useRegister";
 
-export default function LoginView({ navigation }) {
-  const { email, setEmail, password, setPassword, error, handleLogin } =
-    useAuthViewModel();
+export default function SignUpView({ navigation }) {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const { registerUser, loading, error } = useRegister();
+
+  const handleRegister = async () => {
+    const result = await registerUser(fullName, email, password);
+    if (result) {
+      navigation.navigate("Login");
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>PetAdopt 🐾</Text>
 
       <View style={styles.card}>
+        {/* Tabs */}
         <View style={styles.tabs}>
-          <Text style={styles.activeTab}>login</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text style={styles.inactiveTab}>sign up</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.inactiveTab}>login</Text>
           </TouchableOpacity>
+          <Text style={styles.activeTab}>sign up</Text>
         </View>
 
+        {/* Full Name */}
+        <Text style={styles.label}>Full Name</Text>
+        <View style={styles.inputBox}>
+          <TextInput
+            style={styles.input}
+            value={fullName}
+            onChangeText={setFullName}
+            placeholder="Enter your name"
+          />
+        </View>
+
+        {/* Email */}
         <Text style={styles.label}>Email</Text>
         <View style={styles.inputBox}>
           <TextInput
             style={styles.input}
             value={email}
             onChangeText={setEmail}
-            placeholder="Email"
+            placeholder="Enter your email"
             keyboardType="email-address"
             autoCapitalize="none"
           />
         </View>
 
+        {/* Password */}
         <Text style={styles.label}>Password</Text>
         <View style={styles.inputBox}>
           <TextInput
             style={styles.input}
             value={password}
             onChangeText={setPassword}
-            placeholder="Password"
+            placeholder="Min 8 characters"
             secureTextEntry={!showPassword}
           />
           <Ionicons
@@ -55,22 +78,20 @@ export default function LoginView({ navigation }) {
           />
         </View>
 
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {/* Error */}
+        {error && <Text style={styles.errorText}>{error}</Text>}
 
+        {/* Button */}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => handleLogin(navigation)}
+          onPress={handleRegister}
+          disabled={loading}
         >
-          <Text style={styles.buttonText}>SIGN IN</Text>
+          <Text style={styles.buttonText}>
+            {loading ? "Registering..." : "SIGN UP"}
+          </Text>
         </TouchableOpacity>
-
-        <Text style={styles.forgotText}>Forgot password?</Text>
       </View>
-
-      <Image
-        source={{ uri: "https://tu-link-al-perro.png" }}
-        style={styles.dogImage}
-      />
     </View>
   );
 }
@@ -85,7 +106,7 @@ const styles = StyleSheet.create({
 
   logo: {
     fontSize: 32,
-    color: "#fff", // 🔥 corregido (antes decía ycolor)
+    color: "#fff",
     fontWeight: "bold",
     marginBottom: 40,
   },
@@ -96,8 +117,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 25,
     zIndex: 2,
-    elevation: 5, // 🔥 sombra en Android
-    shadowColor: "#000", // 🔥 sombra iOS
+    elevation: 5,
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
   },
@@ -133,7 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderWidth: 1,
     borderColor: "#DDD",
-    borderRadius: 12, // 🔥 más moderno
+    borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
     paddingRight: 10,
@@ -164,21 +185,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 10,
     textAlign: "center",
-  },
-
-  forgotText: {
-    textAlign: "center",
-    marginTop: 15,
-    color: "#666",
-    fontSize: 12,
-  },
-
-  dogImage: {
-    width: 300,
-    height: 200,
-    position: "absolute",
-    bottom: 0,
-    right: -50,
-    opacity: 0.9,
   },
 });
