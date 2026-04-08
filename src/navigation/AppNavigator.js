@@ -13,9 +13,9 @@ import HistorialView from "../views/HistorialView";
 import ProfileView from "../views/ProfileView";
 import AddPetView from "../views/AddPetView";
 import PetDetailView from "../views/PetDetailView";
-
-// 🔥 NUEVO
 import SolicitudesView from "../views/SolicitudesView";
+
+import { PetsProvider } from "../context/PetsContext";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,37 +26,47 @@ function MainTabs() {
       screenOptions={({ route }) => ({
         headerShown: false,
 
+        // 🔥 TAB BAR AZUL
         tabBarStyle: {
-          backgroundColor: "#fff",
+          backgroundColor: "#2F6BFF",
           height: 65,
+          borderTopWidth: 0,
+          elevation: 10,
         },
 
-        tabBarActiveTintColor: "#2F6BFF",
-        tabBarInactiveTintColor: "#999",
+        // 🔥 COLORES ICONOS
+        tabBarActiveTintColor: "#fff",
+        tabBarInactiveTintColor: "#C7D2FE",
 
         tabBarIcon: ({ color, focused }) => {
           let iconName;
 
-          if (route.name === "Swipe") iconName = focused ? "heart" : "heart-outline";
-          if (route.name === "Home") iconName = focused ? "home" : "home-outline";
-          if (route.name === "Historial") iconName = focused ? "time" : "time-outline";
-          if (route.name === "Profile") iconName = focused ? "person" : "person-outline";
-
-          // 🔥 SOLICITUDES
+          if (route.name === "Swipe")
+            iconName = focused ? "heart" : "heart-outline";
+          if (route.name === "Home")
+            iconName = focused ? "home" : "home-outline";
+          if (route.name === "Historial")
+            iconName = focused ? "time" : "time-outline";
+          if (route.name === "Profile")
+            iconName = focused ? "person" : "person-outline";
           if (route.name === "Solicitudes")
             iconName = focused ? "mail" : "mail-outline";
 
-          return <Icon name={iconName} size={22} color={color} />;
+          return (
+            <Icon
+              name={iconName}
+              size={24}
+              color={color}
+              style={focused && { transform: [{ scale: 1.2 }] }} // 🔥 animación
+            />
+          );
         },
       })}
     >
       <Tab.Screen name="Swipe" component={SwipeView} />
       <Tab.Screen name="Home" component={HomeView} />
       <Tab.Screen name="Historial" component={HistorialView} />
-
-      {/* 🔥 NUEVO BOTÓN */}
       <Tab.Screen name="Solicitudes" component={SolicitudesView} />
-
       <Tab.Screen name="Profile" component={ProfileView} />
     </Tab.Navigator>
   );
@@ -64,24 +74,43 @@ function MainTabs() {
 
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
+    <PetsProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Welcome">
+          <Stack.Screen
+            name="Welcome"
+            component={WelcomeView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUpView}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen name="Welcome" component={WelcomeView} />
-        <Stack.Screen name="Login" component={LoginView} />
-        <Stack.Screen name="SignUp" component={SignUpView} />
+          <Stack.Screen
+            name="AddPet"
+            component={AddPetView}
+            options={{ title: "Agregar mascota" }}
+          />
+          <Stack.Screen
+            name="PetDetail"
+            component={PetDetailView}
+            options={{ title: "Detalle" }}
+          />
 
-        <Stack.Screen name="AddPet" component={AddPetView} />
-        <Stack.Screen name="PetDetail" component={PetDetailView} />
-
-        {/* 🔥 TABS */}
-        <Stack.Screen
-          name="Main"
-          component={MainTabs}
-          options={{ headerShown: false }}
-        />
-
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="Main"
+            component={MainTabs}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PetsProvider>
   );
 }

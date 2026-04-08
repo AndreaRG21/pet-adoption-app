@@ -13,19 +13,13 @@ import TopBar from "../components/TopBar";
 export default function HomeView({ navigation }) {
   return (
     <View style={styles.container}>
-      <TopBar title="🐾 Catálogo" />
+      <TopBar />
 
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={() => navigation.navigate("AddPet")}
-        >
-          <Text style={styles.btnText}>+ Add Pet</Text>
-        </TouchableOpacity>
+      {/* TITULOS */}
+      <View style={styles.textContainer}>
+        <Text style={styles.sectionTitle}>Adopta tu compañero 💙</Text>
+        <Text style={styles.subtitle}>Encuentra tu match ideal 🐶</Text>
       </View>
-
-      {/* TITULO */}
-      <Text style={styles.sectionTitle}>Adopta tu compañero 💙</Text>
 
       {/* LISTA */}
       <FlatList
@@ -39,6 +33,14 @@ export default function HomeView({ navigation }) {
           <PetCard pet={item} navigation={navigation} />
         )}
       />
+
+      {/* 🔥 BOTÓN FLOTANTE */}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate("AddPet")}
+      >
+        <Text style={styles.fabText}>＋</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -46,62 +48,60 @@ export default function HomeView({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F3F7FF",
+    backgroundColor: "#F8FAFF",
   },
 
-  header: {
-    flexDirection: "row",
-    paddingHorizontal: 15,
-    marginTop: 10,
-    gap: 10,
-  },
-
-  addBtn: {
-    flex: 1,
-    backgroundColor: "#22c5bd",
-    paddingVertical: 12,
-    borderRadius: 16,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-
-  logoutBtn: {
-    flex: 1,
-    backgroundColor: "#1F2937",
-    paddingVertical: 12,
-    borderRadius: 16,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-
-  btnText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 13,
+  textContainer: {
+    paddingHorizontal: 20,
+    marginTop: 15,
   },
 
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontWeight: "800",
     color: "#1F2937",
-    marginTop: 15,
-    marginLeft: 15,
+  },
+
+  subtitle: {
+    marginTop: 5,
+    color: "#6B7280",
+    fontSize: 14,
   },
 
   list: {
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 90,
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    paddingBottom: 120, // espacio para botón flotante
   },
 
   row: {
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 15,
+  },
+
+  // 🔥 FAB (Floating Action Button)
+  fab: {
+    position: "absolute",
+    bottom: 25,
+    alignSelf: "center",
+
+    backgroundColor: "#2F6BFF",
+    width: 65,
+    height: 65,
+    borderRadius: 35,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    shadowColor: "#2F6BFF",
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+
+  fabText: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "bold",
   },
 });

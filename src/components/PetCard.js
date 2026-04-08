@@ -7,10 +7,8 @@ export default function PetCard({ pet, navigation }) {
       onPress={() => navigation.navigate("PetDetail", { pet })}
       activeOpacity={0.8}
     >
-      
       <Image source={{ uri: pet.image }} style={styles.image} />
 
-     
       <View style={styles.infoContainer}>
         <Text style={styles.name}>{pet.name}</Text>
         <Text style={styles.breed}>{pet.breed}</Text>
@@ -37,6 +35,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 140,
+    borderRadius: 15,
   },
 
   infoContainer: {

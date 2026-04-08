@@ -3,29 +3,36 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 export default function WelcomeView({ navigation }) {
   return (
     <View style={styles.container}>
-      {/*  MASCOTAS ARRIBA */}
+      {/* 🐶 IMÁGENES ARRIBA */}
       <View style={styles.topContainer}>
+        <Image source={require("../assets/bunny.png")} style={styles.topLeft} />
+        <Image source={require("../assets/cat.png")} style={styles.topRight} />
+      </View>
+
+      {/* 🐾 IMÁGENES ABAJO */}
+      <View style={styles.bottomContainer}>
         <Image
-          source={{ uri: "https://placedog.net/410" }}
-          style={styles.topLeft}
+          source={require("../assets/huron.png")}
+          style={styles.bottomLeft}
         />
         <Image
-          source={{ uri: "https://placedog.net/411" }}
-          style={styles.topRight}
+          source={require("../assets/whiteDog.png")}
+          style={styles.bottomRight}
         />
       </View>
 
-      {/*  CÍRCULO CENTRAL */}
+      {/* ⚪ CÍRCULO */}
       <View style={styles.circle}>
         <Text style={styles.wip}>WIP</Text>
       </View>
 
-      {/* 🐾 FRANJA DECORATIVA */}
+      {/* 🐾 FRANJA */}
       <View style={styles.band} />
 
       {/* 🐾 TÍTULO */}
       <Text style={styles.title}>PetAdopt</Text>
 
+      {/* 🔘 BOTÓN */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Main", { screen: "Swipe" })}
@@ -47,27 +54,50 @@ const styles = StyleSheet.create({
   // 🔝 ARRIBA
   topContainer: {
     position: "absolute",
-    top: 70,
+    top: 60,
     width: "100%",
   },
 
   topLeft: {
     position: "absolute",
-    left: 20,
-    width: 130,
-    height: 130,
-    borderRadius: 25,
+    left: 10,
+    width: 250,
+    height: 500,
+    resizeMode: "contain",
   },
 
   topRight: {
     position: "absolute",
-    right: 20,
-    width: 130,
-    height: 130,
-    borderRadius: 25,
+    right: 0,
+    width: 290,
+    height: 450,
+    resizeMode: "contain",
   },
 
-  //  CÍRCULO
+  // 🔻 ABAJO
+  bottomContainer: {
+    position: "absolute",
+    bottom: 300,
+    width: "100%",
+  },
+
+  bottomLeft: {
+    position: "absolute",
+    left: 10,
+    width: 200,
+    height: 300,
+    resizeMode: "contain",
+  },
+
+  bottomRight: {
+    position: "absolute",
+    right: 0,
+    width: 300,
+    height: 400,
+    resizeMode: "contain",
+  },
+
+  // ⚪ CÍRCULO
   circle: {
     width: 130,
     height: 130,
@@ -84,7 +114,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  //  FRANJA
+  // ⚪ FRANJA
   band: {
     position: "absolute",
     width: "100%",
@@ -93,7 +123,7 @@ const styles = StyleSheet.create({
     top: "45%",
   },
 
-  //  TEXTO
+  // 🐾 TEXTO
   title: {
     position: "absolute",
     bottom: 180,
@@ -102,7 +132,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 
-  //  BOTÓN
+  // 🔘 BOTÓN
   button: {
     position: "absolute",
     bottom: 40,

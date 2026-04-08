@@ -7,7 +7,7 @@ import {
   Image,
   FlatList,
 } from "react-native";
-
+import TopBar from "../components/TopBar";
 import { pets } from "../data/pets";
 
 export default function SolicitudesView() {
@@ -15,75 +15,76 @@ export default function SolicitudesView() {
 
   return (
     <View style={styles.container}>
-      {/* 🔵 HEADER */}
-      <Text style={styles.title}>Mis Solicitudes</Text>
+      <TopBar />
 
-      {/* 🔘 TABS */}
-      <View style={styles.tabs}>
-        <TouchableOpacity onPress={() => setActiveTab("proceso")}>
-          <Text
-            style={[
-              styles.tab,
-              activeTab === "proceso" && styles.activeTab,
-            ]}
-          >
-            En Proceso
-          </Text>
-        </TouchableOpacity>
+      <View style={styles.content}>
+        <Text style={styles.title}>Mis Solicitudes</Text>
 
-        <TouchableOpacity onPress={() => setActiveTab("adoptados")}>
-          <Text
-            style={[
-              styles.tab,
-              activeTab === "adoptados" && styles.activeTab,
-            ]}
-          >
-            Adoptados
-          </Text>
-        </TouchableOpacity>
-      </View>
+        {/* 🔘 TABS */}
+        <View style={styles.tabs}>
+          <TouchableOpacity onPress={() => setActiveTab("proceso")}>
+            <Text
+              style={[styles.tab, activeTab === "proceso" && styles.activeTab]}
+            >
+              En Proceso
+            </Text>
+          </TouchableOpacity>
 
-      {/* 🐶 LISTA */}
-      <FlatList
-        data={pets}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.list}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+          <TouchableOpacity onPress={() => setActiveTab("adoptados")}>
+            <Text
+              style={[
+                styles.tab,
+                activeTab === "adoptados" && styles.activeTab,
+              ]}
+            >
+              Adoptados
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-            <View style={{ flex: 1 }}>
-              <Text style={styles.name}>{item.name}</Text>
+        {/* 🐶 LISTA */}
+        <FlatList
+          data={pets}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.list}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <Image source={{ uri: item.image }} style={styles.image} />
 
-              {activeTab === "proceso" ? (
-                <>
-                  <Text style={styles.pending}>
-                    Solicitud en revisión
-                  </Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.name}>{item.name}</Text>
 
-                  <View style={styles.progressBar}>
-                    <View style={styles.progressFill} />
-                  </View>
-                </>
-              ) : (
-                <>
-                  <Text style={styles.approved}>APROBADO!</Text>
-                  <Text style={styles.contact}>Contáctanos</Text>
-                </>
-              )}
+                {activeTab === "proceso" ? (
+                  <>
+                    <Text style={styles.pending}>Solicitud en revisión</Text>
+
+                    <View style={styles.progressBar}>
+                      <View style={styles.progressFill} />
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.approved}>APROBADO!</Text>
+                    <Text style={styles.contact}>Contáctanos</Text>
+                  </>
+                )}
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
+      </View>
     </View>
   );
 }
 
-// 🔥 ESTILOS (ESTO TE FALTABA)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#2F6BFF",
+  },
+  content: {
+    flex: 1,
+    padding: 20,
   },
 
   title: {

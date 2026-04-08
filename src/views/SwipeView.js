@@ -9,13 +9,16 @@ import { useRef, useState } from "react";
 import { pets } from "../data/pets";
 import SwipeCard from "../components/SwipeCard";
 import ActionButtons from "../components/ActionButtons";
+import { useContext } from "react";
+import { PetsContext } from "../context/PetsContext";
+import TopBar from "../components/TopBar";
 
 export default function SwipeView({ navigation }) {
   const [index, setIndex] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  const [likedPets, setLikedPets] = useState([]);
-  const [dislikedPets, setDislikedPets] = useState([]);
+  const { likedPets, setLikedPets, dislikedPets, setDislikedPets } =
+    useContext(PetsContext);
 
   const position = useRef(new Animated.ValueXY()).current;
 
@@ -52,52 +55,72 @@ export default function SwipeView({ navigation }) {
     transform: [{ translateX: position.x }],
   };
 
+  const resetSwipe = () => {
+    setIndex(0);
+    setFinished(false);
+    setLikedPets([]);
+    setDislikedPets([]);
+    position.setValue({ x: 0, y: 0 });
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>PetAdopt 🐾</Text>
+      <TopBar />
 
-      {!finished ? (
-        <>
-          {pets[index] && (
-            <Animated.View style={[styles.cardContainer, animatedStyle]}>
-              <SwipeCard pet={pets[index]} />
-            </Animated.View>
+      <View style={styles.content}>
+        <View style={styles.centerArea}>
+          {!finished ? (
+            <>
+              {pets[index] && (
+                <Animated.View style={[styles.cardContainer, animatedStyle]}>
+                  <SwipeCard pet={pets[index]} />
+                </Animated.View>
+              )}
+            </>
+          ) : (
+            <View style={styles.endContainer}>
+              <Text style={styles.endText}>No hay más mascotas 🐶</Text>
+            </View>
           )}
+        </View>
 
+        {!finished && (
           <View style={styles.buttons}>
             <ActionButtons onLike={handleLike} onDislike={handleDislike} />
           </View>
-        </>
-      ) : (
-        <View style={styles.endContainer}>
-          <Text style={styles.endText}>No hay más mascotas 🐶</Text>
-
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() =>
-              navigation.navigate("Main", {
-                screen: "Solicitudes", // 👈 asegúrate que así se llama tu tab
-                params: {
-                  likedPets,
-                  dislikedPets, // 🔥 YA SE MANDA
-                },
-              })
-            }
-          >
-            <Text style={styles.btnText}>Ver Solicitudes</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   container: {
     flex: 1,
-    backgroundColor: "#2F6BFF",
+    backgroundColor: "#ffffff",
+  },
+
+  content: {
+    flex: 1,
+  },
+
+  centerArea: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  buttons: {
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 40,
+    width: "100%",
   },
 
   title: {
@@ -112,15 +135,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  buttons: {
-    marginTop: 20,
-  },
-
   btn: {
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 15,
     marginHorizontal: 5,
+    marginTop: 20,
   },
 
   btnText: {
