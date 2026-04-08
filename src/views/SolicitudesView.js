@@ -1,109 +1,40 @@
-<<<<<<< HEAD
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  FlatList,
-} from "react-native";
-import TopBar from "../components/TopBar";
-import { pets } from "../data/pets";
+import React, { useState, useContext } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import { PetsContext } from "../context/PetsContext";
 
 export default function SolicitudesView() {
-  const [activeTab, setActiveTab] = useState("proceso");
+  const { likedPets, dislikedPets } = useContext(PetsContext);
+  const [activeTab, setActiveTab] = useState("liked");
+
+  const tabs = [
+    { key: "liked", label: "Mascotas que te gustaron" },
+    { key: "disliked", label: "Mascotas que no te gustaron" },
+  ];
 
   return (
     <View style={styles.container}>
-      <TopBar />
+      <Text style={styles.title}>Mis Solicitudes ❤️</Text>
 
-      <View style={styles.content}>
-        <Text style={styles.title}>Mis Solicitudes</Text>
-
-        {/* 🔘 TABS */}
-        <View style={styles.tabs}>
-          <TouchableOpacity onPress={() => setActiveTab("proceso")}>
-            <Text
-              style={[styles.tab, activeTab === "proceso" && styles.activeTab]}
-            >
-              En Proceso
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => setActiveTab("adoptados")}>
-            <Text
-              style={[
-                styles.tab,
-                activeTab === "adoptados" && styles.activeTab,
-              ]}
-            >
-              Adoptados
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* 🐶 LISTA */}
-        <FlatList
-          data={pets}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.list}
-          renderItem={({ item }) => (
-            <View style={styles.card}>
-              <Image source={{ uri: item.image }} style={styles.image} />
-
-              <View style={{ flex: 1 }}>
-                <Text style={styles.name}>{item.name}</Text>
-
-                {activeTab === "proceso" ? (
-                  <>
-                    <Text style={styles.pending}>Solicitud en revisión</Text>
-
-                    <View style={styles.progressBar}>
-                      <View style={styles.progressFill} />
-                    </View>
-                  </>
-                ) : (
-                  <>
-                    <Text style={styles.approved}>APROBADO!</Text>
-                    <Text style={styles.contact}>Contáctanos</Text>
-                  </>
-                )}
-              </View>
-            </View>
-          )}
-        />
+      {/* 🔘 Tabs simples */}
+      <View style={styles.tabs}>
+        {tabs.map((tab) => (
+          <Text
+            key={tab.key}
+            style={[styles.tab, activeTab === tab.key && styles.activeTab]}
+            onPress={() => setActiveTab(tab.key)}
+          >
+            {tab.label}
+          </Text>
+        ))}
       </View>
-=======
-import { View, Text, StyleSheet, FlatList } from "react-native";
 
-export default function SolicitudesView({ route }) {
-  const { likedPets = [], dislikedPets = [] } = route.params || {};
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Solicitudes ❤️</Text>
-
-      <Text style={styles.subtitle}>Mascotas que te gustaron:</Text>
-
+      {/* 🐶 Lista según tab activo */}
       <FlatList
-        data={likedPets}
+        data={activeTab === "liked" ? likedPets : dislikedPets}
         keyExtractor={(item, index) => item._id || index.toString()}
-        renderItem={({ item }) => (
-          <Text style={styles.item}>{item.name}</Text>
-        )}
+        contentContainerStyle={styles.list}
+        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
       />
-
-      <Text style={styles.subtitle}>No te gustaron:</Text>
-
-      <FlatList
-        data={dislikedPets}
-        keyExtractor={(item, index) => item._id || index.toString()}
-        renderItem={({ item }) => (
-          <Text style={styles.item}>{item.name}</Text>
-        )}
-      />
->>>>>>> 30425a0af6f631f3d9242a8cc8f45c29da810b63
     </View>
   );
 }
@@ -114,22 +45,26 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#F3F7FF",
   },
-<<<<<<< HEAD
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-
-=======
->>>>>>> 30425a0af6f631f3d9242a8cc8f45c29da810b63
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
   },
-  subtitle: {
-    marginTop: 15,
+  tabs: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 15,
+  },
+  tab: {
     fontWeight: "bold",
+    color: "#777",
+  },
+  activeTab: {
+    color: "#2F6BFF",
+    textDecorationLine: "underline",
+  },
+  list: {
+    paddingBottom: 100,
   },
   item: {
     padding: 10,
